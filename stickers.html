@@ -241,6 +241,7 @@
       --ball-rot: 0deg;
       width: clamp(42px, 4.4vw, 70px);
       height: clamp(42px, 4.4vw, 70px);
+      font-size: clamp(40px, 4.2vw, 67px);
       min-height: 0;
       padding: 0;
       position: absolute;
@@ -263,6 +264,17 @@
       width: 100%;
       height: 100%;
       display: block;
+      filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.24));
+      pointer-events: none;
+    }
+
+    .soccer-ball-glyph {
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100%;
+      font-size: 1em;
+      line-height: 1;
       filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.24));
       pointer-events: none;
     }
@@ -3104,6 +3116,7 @@
       .soccer-ball {
         width: 70px;
         height: 70px;
+        font-size: 66px;
       }
 
       .trivia-options {
@@ -3266,44 +3279,45 @@
           <clipPath id="keepyBallClip">
             <circle cx="60" cy="60" r="55"></circle>
           </clipPath>
-          <radialGradient id="keepyBallShade" cx="32%" cy="22%" r="76%">
+          <radialGradient id="keepyBallShade" cx="34%" cy="25%" r="76%">
             <stop offset="0%" stop-color="#ffffff"></stop>
-            <stop offset="58%" stop-color="#f8f8f2"></stop>
-            <stop offset="84%" stop-color="#d7dde2"></stop>
-            <stop offset="100%" stop-color="#87929f"></stop>
+            <stop offset="58%" stop-color="#f7f7f2"></stop>
+            <stop offset="84%" stop-color="#d9dee2"></stop>
+            <stop offset="100%" stop-color="#8c96a1"></stop>
           </radialGradient>
           <radialGradient id="keepyPanelShade" cx="34%" cy="22%" r="86%">
-            <stop offset="0%" stop-color="#343d49"></stop>
-            <stop offset="66%" stop-color="#101722"></stop>
+            <stop offset="0%" stop-color="#2c333d"></stop>
+            <stop offset="72%" stop-color="#080c13"></stop>
             <stop offset="100%" stop-color="#000000"></stop>
           </radialGradient>
         </defs>
         <circle cx="60" cy="60" r="56" fill="#f6f7f1"></circle>
         <g clip-path="url(#keepyBallClip)">
           <circle cx="60" cy="60" r="56" fill="url(#keepyBallShade)"></circle>
-          <path d="M60 39 L77 51 L71 70 L49 70 L43 51 Z" fill="url(#keepyPanelShade)"></path>
-          <path d="M60 7 L74 18 L70 34 L50 34 L46 18 Z" fill="url(#keepyPanelShade)"></path>
-          <path d="M101 35 L112 53 L101 70 L84 65 L81 48 L91 39 Z" fill="url(#keepyPanelShade)"></path>
-          <path d="M82 96 L64 109 L45 100 L48 84 L66 79 L79 86 Z" fill="url(#keepyPanelShade)"></path>
-          <path d="M19 35 L8 53 L19 70 L36 65 L39 48 L29 39 Z" fill="url(#keepyPanelShade)"></path>
+          <path d="M60 38 L80 53 L72 76 L48 76 L40 53 Z" fill="url(#keepyPanelShade)"></path>
+          <path d="M60 8 L76 20 L70 36 L50 36 L44 20 Z" fill="url(#keepyPanelShade)"></path>
+          <path d="M102 36 L114 56 L102 76 L85 70 L82 53 L92 42 Z" fill="url(#keepyPanelShade)"></path>
+          <path d="M88 94 L76 110 L60 106 L58 88 L72 76 L85 81 Z" fill="url(#keepyPanelShade)"></path>
+          <path d="M32 94 L44 110 L60 106 L62 88 L48 76 L35 81 Z" fill="url(#keepyPanelShade)"></path>
+          <path d="M18 36 L6 56 L18 76 L35 70 L38 53 L28 42 Z" fill="url(#keepyPanelShade)"></path>
 
-          <path d="M60 39 L77 51 L71 70 L49 70 L43 51 Z
-                   M60 39 L60 34 M77 51 L81 48 M71 70 L79 86 M49 70 L48 84 M43 51 L39 48
-                   M70 34 C76 37 83 42 91 39 M50 34 C44 37 37 42 29 39
-                   M36 65 C41 68 45 69 49 70 M84 65 C79 68 75 69 71 70
-                   M66 79 C64 75 62 72 60 70 M54 79 C56 75 58 72 60 70"
-                fill="none" stroke="#5e6873" stroke-opacity="0.62" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
-          <path d="M60 39 L77 51 L71 70 L49 70 L43 51 Z
-                   M60 7 L74 18 L70 34 L50 34 L46 18 Z
-                   M101 35 L112 53 L101 70 L84 65 L81 48 L91 39 Z
-                   M82 96 L64 109 L45 100 L48 84 L66 79 L79 86 Z
-                   M19 35 L8 53 L19 70 L36 65 L39 48 L29 39 Z"
-                fill="none" stroke="#030509" stroke-opacity="0.55" stroke-width="1.1" stroke-linejoin="round"></path>
-          <ellipse cx="38" cy="24" rx="26" ry="17" fill="#ffffff" opacity="0.46" transform="rotate(-24 38 24)"></ellipse>
-          <path d="M78 84 C95 90 103 103 92 118 C108 108 118 83 114 59 C110 71 99 82 78 84Z" fill="#0c1420" opacity="0.15"></path>
+          <path d="M60 38 L80 53 L72 76 L48 76 L40 53 Z
+                   M60 8 L76 20 L70 36 L50 36 L44 20 Z
+                   M102 36 L114 56 L102 76 L85 70 L82 53 L92 42 Z
+                   M88 94 L76 110 L60 106 L58 88 L72 76 L85 81 Z
+                   M32 94 L44 110 L60 106 L62 88 L48 76 L35 81 Z
+                   M18 36 L6 56 L18 76 L35 70 L38 53 L28 42 Z"
+                fill="none" stroke="#111821" stroke-opacity="0.66" stroke-width="1.2" stroke-linejoin="round"></path>
+          <path d="M60 38 L60 36 M80 53 L82 53 M72 76 L72 76 M48 76 L48 76 M40 53 L38 53
+                   M50 36 C43 38 35 42 28 42 M70 36 C77 38 85 42 92 42
+                   M35 70 C40 73 44 75 48 76 M85 70 C80 73 76 75 72 76
+                   M58 88 C54 84 50 80 48 76 M62 88 C66 84 70 80 72 76"
+                fill="none" stroke="#5f6974" stroke-opacity="0.7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <ellipse cx="37" cy="24" rx="25" ry="16" fill="#ffffff" opacity="0.38" transform="rotate(-24 37 24)"></ellipse>
+          <path d="M78 84 C96 90 104 103 93 118 C109 108 118 83 114 58 C110 71 99 82 78 84Z" fill="#0c1420" opacity="0.14"></path>
         </g>
-        <circle cx="60" cy="60" r="55" fill="none" stroke="#ffffff" stroke-width="2.6" opacity="0.75"></circle>
-        <circle cx="60" cy="60" r="55" fill="none" stroke="#07101e" stroke-width="1.4" opacity="0.26"></circle>
+        <circle cx="60" cy="60" r="55" fill="none" stroke="#ffffff" stroke-width="2.6" opacity="0.78"></circle>
+        <circle cx="60" cy="60" r="55" fill="none" stroke="#07101e" stroke-width="1.4" opacity="0.28"></circle>
       </svg>
     </button>
   </div>
