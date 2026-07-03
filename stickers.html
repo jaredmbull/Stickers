@@ -1,0 +1,5679 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Full Album FC</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy: #061a3b;
+      --navy-2: #0d2d63;
+      --ink: #0b1730;
+      --muted: #667181;
+      --paper: #fff8e7;
+      --paper-2: #efe4c9;
+      --line: #d6b765;
+      --gold: #f4c454;
+      --gold-2: #a8731c;
+      --blue: #2d6cdf;
+      --red: #d94e48;
+      --green: #26a96c;
+      --purple: #5b2f91;
+      --cream: #fffdf4;
+      --panel-glow: rgba(244, 196, 84, 0.16);
+      --shadow: rgba(2, 11, 28, 0.42);
+      --stage-height: calc(100vh - 112px);
+      --magazine-height: calc(100vh - 164px);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 8%, rgba(255, 255, 255, 0.16), transparent 14%),
+        radial-gradient(circle at 92% 10%, rgba(255, 255, 255, 0.13), transparent 14%),
+        radial-gradient(circle at 50% 10%, rgba(244, 196, 84, 0.2), transparent 34%),
+        linear-gradient(128deg, rgba(217, 78, 72, 0.24), transparent 28%),
+        linear-gradient(244deg, rgba(38, 169, 108, 0.22), transparent 30%),
+        linear-gradient(318deg, rgba(91, 47, 145, 0.25), transparent 34%),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.035) 0 2px, transparent 2px 28px),
+        linear-gradient(180deg, #031029, var(--navy) 58%, #020815);
+      padding: 4px 12px 8px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, transparent 0 9%, rgba(255,255,255,0.08) 9% 9.4%, transparent 9.4% 90.6%, rgba(255,255,255,0.08) 90.6% 91%, transparent 91%),
+        radial-gradient(ellipse at 50% -10%, rgba(244, 196, 84, 0.18), transparent 42%);
+      pointer-events: none;
+    }
+
+    button {
+      min-height: 42px;
+      border: 1px solid var(--gold-2);
+      border-radius: 8px;
+      background: linear-gradient(#fff4cf, #e7c76b);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 850;
+      cursor: pointer;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    button:hover {
+      background: linear-gradient(#fff8df, #f1d37a);
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: none;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .primary {
+      background: linear-gradient(#ffe793, var(--gold) 55%, #d79b2b);
+      border-color: var(--gold-2);
+    }
+
+    .danger {
+      background: linear-gradient(#ffe9e4, #f4b3aa);
+      border-color: #b85d51;
+    }
+
+    .app {
+      width: min(1660px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(178px, 220px) minmax(760px, 1fr) minmax(200px, 260px);
+      gap: 12px;
+      align-items: start;
+      min-height: var(--stage-height);
+    }
+
+    .game-banner {
+      width: min(1660px, 100%);
+      min-height: 42px;
+      margin: 0 auto 5px;
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      gap: 9px;
+      align-items: center;
+      padding: 4px 8px;
+      border: 1px solid rgba(244, 196, 84, 0.64);
+      border-radius: 8px;
+      background:
+        linear-gradient(115deg, rgba(217,78,72,0.95), rgba(13,45,99,0.95) 36%, rgba(22,149,86,0.9) 72%, rgba(91,47,145,0.9)),
+        var(--navy);
+      color: #fff;
+      box-shadow: 0 18px 60px rgba(2, 8, 21, 0.38);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .game-banner::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(255,255,255,0.22), transparent 16%),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.08) 0 2px, transparent 2px 18px);
+      pointer-events: none;
+    }
+
+    .banner-card {
+      width: 34px;
+      aspect-ratio: 3 / 4;
+      border: 2px solid #f7d777;
+      border-radius: 8px;
+      background: url("images/backers/backer.png") center / cover;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.34);
+      transform: rotate(-4deg);
+      z-index: 1;
+    }
+
+    .banner-copy {
+      z-index: 1;
+      display: grid;
+      gap: 4px;
+    }
+
+    .banner-copy h1 {
+      color: #fff;
+      text-shadow: 0 3px 0 rgba(5, 12, 28, 0.5), 0 0 24px rgba(244,196,84,0.42);
+      font-size: clamp(1.25rem, 2.2vw, 2.05rem);
+    }
+
+    .banner-copy p {
+      margin: 0;
+      max-width: 42rem;
+      color: rgba(255,255,255,0.86);
+      font-weight: 800;
+      display: none;
+    }
+
+    .banner-pill {
+      z-index: 1;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.42);
+      background: rgba(255, 248, 231, 0.16);
+      color: #fff;
+      font-weight: 950;
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.24);
+    }
+
+    .keepy-widget {
+      position: fixed;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .keepy-score {
+      position: absolute;
+      right: max(14px, env(safe-area-inset-right));
+      bottom: max(92px, calc(env(safe-area-inset-bottom) + 92px));
+      min-width: 128px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1px 8px;
+      align-items: center;
+      padding: 7px 9px;
+      border: 1px solid rgba(244, 196, 84, 0.72);
+      border-radius: 999px;
+      background:
+        linear-gradient(135deg, rgba(255, 253, 244, 0.95), rgba(255, 238, 184, 0.88)),
+        var(--paper);
+      box-shadow: 0 12px 34px rgba(2, 8, 21, 0.3);
+      color: var(--ink);
+      pointer-events: auto;
+    }
+
+    .keepy-score span,
+    .keepy-score small {
+      font-size: 0.62rem;
+      font-weight: 950;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #536074;
+      line-height: 1;
+    }
+
+    .keepy-score strong {
+      grid-row: 1 / 3;
+      grid-column: 2;
+      min-width: 2ch;
+      font-size: 1.35rem;
+      line-height: 1;
+      text-align: right;
+      color: var(--navy);
+    }
+
+    .keepy-score b {
+      color: var(--gold-2);
+    }
+
+    .soccer-ball {
+      --ball-x: 0px;
+      --ball-y: 0px;
+      --ball-rot: 0deg;
+      width: clamp(42px, 4.4vw, 70px);
+      height: clamp(42px, 4.4vw, 70px);
+      min-height: 0;
+      padding: 0;
+      position: absolute;
+      left: var(--ball-x);
+      top: var(--ball-y);
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      box-shadow:
+        0 16px 24px rgba(0, 0, 0, 0.32);
+      transform: translate(-50%, -50%) rotate(var(--ball-rot));
+      transform-origin: center;
+      transition: box-shadow 120ms ease, filter 120ms ease;
+      touch-action: none;
+      pointer-events: auto;
+      overflow: visible;
+    }
+
+    .soccer-ball svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.24));
+      pointer-events: none;
+    }
+
+    .soccer-ball:hover {
+      filter: brightness(1.05);
+      box-shadow:
+        0 18px 30px rgba(0, 0, 0, 0.38),
+        0 0 0 5px rgba(244, 196, 84, 0.18);
+    }
+
+    .soccer-ball:active {
+      transform: translate(-50%, -50%) rotate(var(--ball-rot)) scale(0.97);
+    }
+
+    .panel,
+    .book {
+      border: 1px solid rgba(244, 196, 84, 0.52);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(255, 248, 231, 0.96)),
+        var(--paper);
+      box-shadow: 0 18px 50px var(--shadow);
+    }
+
+    .panel {
+      padding: 10px;
+      display: grid;
+      gap: 9px;
+      align-content: start;
+      max-height: var(--stage-height);
+      overflow: auto;
+    }
+
+    .panel.hero-panel {
+      background:
+        linear-gradient(180deg, rgba(255, 253, 244, 0.98), rgba(249, 236, 199, 0.98)),
+        var(--paper);
+    }
+
+    .section {
+      display: grid;
+      gap: 7px;
+      padding: 8px;
+      border: 1px solid rgba(168, 115, 28, 0.34);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.66), rgba(255, 246, 221, 0.56));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(255,255,255,0.32), transparent 36%);
+      pointer-events: none;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .section-toggle {
+      width: 100%;
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      text-align: left;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-toggle:hover,
+    .section-toggle:active {
+      background: transparent;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .section-toggle::after {
+      content: "+";
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(168, 115, 28, 0.36);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.64);
+      color: var(--navy);
+      font-weight: 1000;
+    }
+
+    .section.expanded .section-toggle::after {
+      content: "-";
+    }
+
+    .section-body {
+      display: grid;
+      gap: 9px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section:not(.expanded) .section-body {
+      display: none;
+    }
+
+    .section-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--navy);
+      font-size: 0.72rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 3px rgba(244, 196, 84, 0.22);
+    }
+
+    .economy-section .section-title::before { background: var(--green); }
+    .shop-section .section-title::before { background: var(--gold); }
+    .trivia-section .section-title::before { background: var(--blue); }
+    .stack-section .section-title::before { background: var(--red); }
+    .trophy-section .section-title::before { background: var(--gold); }
+
+    .economy-section {
+      background:
+        linear-gradient(135deg, rgba(38,169,108,0.2), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,246,221,0.72));
+    }
+
+    .shop-section {
+      background:
+        linear-gradient(135deg, rgba(244,196,84,0.32), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,246,221,0.72));
+    }
+
+    .trivia-section {
+      background:
+        linear-gradient(135deg, rgba(45,108,223,0.2), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,246,221,0.72));
+    }
+
+    .stack-section {
+      background:
+        linear-gradient(135deg, rgba(217,78,72,0.18), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,246,221,0.72));
+    }
+
+    .trophy-section {
+      background:
+        linear-gradient(135deg, rgba(244,196,84,0.32), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,246,221,0.76));
+    }
+
+    .topstats-section {
+      background:
+        linear-gradient(135deg, rgba(91,47,145,0.2), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,246,221,0.72));
+    }
+
+    .topstats-section .section-title::before {
+      background: var(--purple);
+    }
+
+    .brand-block {
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+      text-align: center;
+      padding-bottom: 2px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.6rem);
+      line-height: 0.96;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: var(--navy);
+      text-shadow: 0 2px 0 rgba(244, 196, 84, 0.5);
+    }
+
+    .brand-backer {
+      width: min(190px, 72%);
+      aspect-ratio: 3 / 4;
+      margin-inline: auto;
+      border: 2px solid #f7d777;
+      border-radius: 8px;
+      background:
+        linear-gradient(rgba(3, 16, 41, 0.02), rgba(3, 16, 41, 0.08)),
+        url("images/backers/backer.png") center / cover;
+      box-shadow: 0 12px 30px rgba(2, 8, 21, 0.25);
+      animation: brandFloat 4.8s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes brandFloat {
+      0%, 100% {
+        transform: translateY(0) rotate(-1deg);
+        filter: brightness(1);
+      }
+
+      50% {
+        transform: translateY(-5px) rotate(1deg);
+        filter: brightness(1.08);
+      }
+    }
+
+    h2,
+    h3 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .stat {
+      min-height: 50px;
+      padding: 7px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.9), rgba(247,236,208,0.95));
+      display: grid;
+      align-content: center;
+      gap: 2px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .value {
+      font-size: 1.05rem;
+      font-weight: 950;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .trivia {
+      display: grid;
+      gap: 8px;
+    }
+
+    .trivia-question {
+      margin: 0;
+      font-weight: 950;
+      line-height: 1.2;
+    }
+
+    .trivia-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .trivia-options button {
+      min-height: 36px;
+      font-size: 0.82rem;
+      line-height: 1.1;
+      padding: 5px 7px;
+    }
+
+    .trivia-status {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .trivia-modal-card {
+      max-width: 720px;
+    }
+
+    .trivia-modal-body {
+      display: grid;
+      gap: 14px;
+      padding: 8px 0 2px;
+    }
+
+    .trivia-modal-body .trivia-question {
+      padding: 18px;
+      border: 1px solid rgba(168, 115, 28, 0.34);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255, 253, 244, 0.92), rgba(255, 238, 184, 0.52)),
+        var(--cream);
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      line-height: 1.08;
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .trivia-modal-body .trivia-options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .trivia-modal-body .trivia-options button {
+      min-height: 56px;
+      padding: 10px;
+      font-size: 0.95rem;
+    }
+
+    .trivia-modal-body .trivia-status {
+      padding: 10px 12px;
+      border-radius: 8px;
+      background: rgba(6, 26, 59, 0.08);
+      color: var(--navy);
+      text-align: center;
+    }
+
+    .upgrades {
+      display: grid;
+      gap: 8px;
+    }
+
+    .upgrade {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6px;
+      align-items: center;
+      padding: 6px;
+      border: 1px solid rgba(168, 115, 28, 0.34);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .upgrade-copy {
+      display: grid;
+      gap: 2px;
+    }
+
+    .upgrade-copy strong {
+      line-height: 1.1;
+    }
+
+    .upgrade-copy span {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 780;
+      line-height: 1.25;
+    }
+
+    .upgrade-control {
+      min-width: 82px;
+      display: grid;
+      justify-items: end;
+      gap: 5px;
+    }
+
+    .upgrade-control button {
+      min-height: 34px;
+      padding-inline: 10px;
+      font-size: 0.84rem;
+    }
+
+    .top-stats {
+      display: grid;
+      gap: 10px;
+    }
+
+    .team-picks,
+    .stat-picks,
+    .trump-actions {
+      display: grid;
+      gap: 6px;
+    }
+
+    .trump-scoreboard {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .trump-score {
+      padding: 8px;
+      border: 1px solid rgba(168, 115, 28, 0.36);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.76);
+      text-align: center;
+      font-weight: 950;
+    }
+
+    .trump-score span {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--muted);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+    }
+
+    .topstats-match-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .trump-table {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+      align-items: start;
+    }
+
+    .trump-table.single-card {
+      grid-template-columns: minmax(260px, min(360px, 100%));
+      justify-content: center;
+    }
+
+    .trump-table.has-reveal .trump-card {
+      animation: trumpSlideLeft 320ms ease both;
+    }
+
+    .trump-table.has-reveal .trump-card.rival {
+      animation: trumpFadeIn 420ms ease 120ms both;
+    }
+
+    .trump-card {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid rgba(168, 115, 28, 0.44);
+      border-radius: 8px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.9), rgba(255,244,205,0.82));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+      min-width: 0;
+      transition: transform 240ms ease, opacity 240ms ease;
+    }
+
+    .trump-card.rival {
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.9), rgba(232,241,255,0.82));
+    }
+
+    .trump-card-head {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .trump-card-head strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 1.08rem;
+      line-height: 1.1;
+    }
+
+    .trump-card-head span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 850;
+    }
+
+    .trump-card .sticker {
+      width: min(270px, 100%);
+      min-height: 360px;
+      margin-inline: auto;
+      pointer-events: none;
+    }
+
+    .trump-card.rival .sticker {
+      filter: saturate(0.92);
+    }
+
+    .compact-stats {
+      display: grid;
+      gap: 4px;
+    }
+
+    .topstats-modal-card .compact-stats {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 5px;
+    }
+
+    .topstats-team-picker {
+      display: grid;
+      grid-template-columns: minmax(210px, 0.7fr) minmax(0, 1.3fr);
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .picked-teams,
+    .available-teams {
+      display: grid;
+      gap: 6px;
+      min-height: 0;
+      padding: 8px;
+      border: 1px solid rgba(168, 115, 28, 0.34);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.54);
+    }
+
+    .available-teams {
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+
+    .selected-team-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .selected-team-pill {
+      min-height: 34px;
+      display: grid;
+      align-items: center;
+      padding: 7px 9px;
+      border: 1px solid rgba(45,108,223,0.24);
+      border-radius: 8px;
+      background: linear-gradient(#eaf2ff, #dbe9ff);
+      color: var(--navy);
+      font-size: 0.82rem;
+      font-weight: 950;
+    }
+
+    .selected-team-pill.empty {
+      border-style: dashed;
+      background: rgba(255,255,255,0.62);
+      color: var(--muted);
+    }
+
+    .topstats-team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 6px;
+      max-height: min(30vh, 230px);
+      overflow: auto;
+      padding: 2px;
+      overscroll-behavior: contain;
+    }
+
+    .topstats-team-grid .team-pick {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 1px 7px;
+      align-items: center;
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .topstats-team-grid .team-pick input {
+      grid-row: span 2;
+    }
+
+    .topstats-team-grid .team-pick span,
+    .topstats-team-grid .team-pick strong,
+    .selected-team-pill {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .topstats-team-grid .team-pick strong {
+      color: var(--muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .compact-stat {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 9px;
+      border-radius: 6px;
+      background: rgba(6, 26, 59, 0.08);
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: 920;
+    }
+
+    .topstats-modal-card .compact-stat {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      gap: 3px;
+      padding: 5px 4px;
+      text-align: center;
+      font-size: 0.68rem;
+    }
+
+    button.compact-stat {
+      width: 100%;
+      min-height: 0;
+      border: 0;
+      box-shadow: none;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    button.compact-stat:hover {
+      background: rgba(45, 108, 223, 0.16);
+    }
+
+    .compact-stat.selected {
+      outline: 2px solid var(--blue);
+      background: rgba(45, 108, 223, 0.16);
+    }
+
+    .compact-stat span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .compact-stat strong {
+      min-width: 25px;
+      padding: 2px 5px;
+      border-radius: 999px;
+      background: var(--navy);
+      color: #fff7cf;
+      text-align: center;
+      font-size: 0.78rem;
+    }
+
+    .topstats-modal-card .compact-stat strong {
+      min-width: 0;
+      width: 100%;
+      max-width: 42px;
+      padding: 2px 4px;
+      font-size: 0.72rem;
+    }
+
+    .trump-hidden-card {
+      width: min(240px, 100%);
+      aspect-ratio: 3 / 4;
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      border: 2px solid #f7d777;
+      border-radius: 8px;
+      background:
+        linear-gradient(rgba(3, 16, 41, 0.02), rgba(3, 16, 41, 0.1)),
+        url("images/backers/backer.png") center / cover;
+      color: #fff7cf;
+      text-align: center;
+      font-weight: 1000;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.48);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.24);
+      margin-inline: auto;
+    }
+
+    .team-pick,
+    .stat-pick {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 8px;
+      border: 1px solid rgba(168, 115, 28, 0.34);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.62);
+      font-size: 0.84rem;
+      font-weight: 850;
+    }
+
+    button.stat-pick {
+      justify-content: space-between;
+      text-align: left;
+    }
+
+    button.stat-pick.selected {
+      border-color: var(--blue);
+      background: linear-gradient(#eaf2ff, #c8dcff);
+    }
+
+    .team-pick.locked {
+      opacity: 0.52;
+    }
+
+    .team-pick input,
+    .stat-pick input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--gold-2);
+    }
+
+    @keyframes trumpSlideLeft {
+      from {
+        transform: translateX(28%) scale(1.02);
+      }
+      to {
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    @keyframes trumpFadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(24px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    .top-stats-result {
+      margin: 0;
+      color: #4d5d73;
+      font-size: 0.86rem;
+      font-weight: 820;
+      line-height: 1.3;
+    }
+
+    .top-stats-result.strong {
+      padding: 9px;
+      border: 1px solid rgba(45,108,223,0.24);
+      border-radius: 8px;
+      background: rgba(234, 242, 255, 0.78);
+      color: var(--navy);
+    }
+
+    .trump-round-result {
+      display: grid;
+      justify-items: center;
+      gap: 5px;
+      padding: 9px;
+      border: 1px solid rgba(168, 115, 28, 0.38);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(244, 196, 84, 0.28), transparent 44%),
+        linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,244,205,0.86));
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.84);
+    }
+
+    .trump-round-result.win {
+      border-color: rgba(31,143,85,0.42);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(31,143,85,0.2), transparent 48%),
+        linear-gradient(135deg, rgba(255,255,255,0.94), rgba(226,248,232,0.86));
+    }
+
+    .trump-round-result.loss {
+      border-color: rgba(217,78,72,0.42);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(217,78,72,0.18), transparent 48%),
+        linear-gradient(135deg, rgba(255,255,255,0.94), rgba(255,232,226,0.86));
+    }
+
+    .trump-round-result.tie {
+      border-color: rgba(45,108,223,0.36);
+      background:
+        radial-gradient(circle at 50% 0%, rgba(45,108,223,0.18), transparent 48%),
+        linear-gradient(135deg, rgba(255,255,255,0.94), rgba(232,241,255,0.86));
+    }
+
+    .round-kicker {
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 950;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .round-title {
+      color: var(--navy);
+      font-size: clamp(1.15rem, 2.2vw, 1.6rem);
+      line-height: 1;
+      font-weight: 1000;
+    }
+
+    .round-score {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: var(--navy);
+      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      line-height: 0.95;
+      font-weight: 1000;
+    }
+
+    .round-score span {
+      min-width: 62px;
+    }
+
+    .round-score small {
+      color: var(--muted);
+      font-size: 0.45em;
+    }
+
+    .round-copy {
+      max-width: 640px;
+      margin: 0;
+      color: #4d5d73;
+      font-size: 0.82rem;
+      font-weight: 820;
+      line-height: 1.25;
+    }
+
+    .trump-round-result .primary {
+      min-height: 36px;
+      padding-block: 7px;
+    }
+
+    .toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 900;
+      color: var(--ink);
+    }
+
+    .toggle input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--gold-2);
+    }
+
+    .pack-stack {
+      min-height: 112px;
+      position: relative;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 50% 34%, rgba(244, 196, 84, 0.14), transparent 42%),
+        linear-gradient(#fffdf6, #f7ecd0);
+      overflow: hidden;
+    }
+
+    .empty-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .pack {
+      width: 58px;
+      height: 86px;
+      position: absolute;
+      left: calc(50% - 29px);
+      top: 14px;
+      border: 2px solid #f7d777;
+      border-radius: 7px;
+      background:
+        linear-gradient(rgba(3, 16, 41, 0.04), rgba(3, 16, 41, 0.1)),
+        url("images/backers/backer.png") center / cover;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+      transform: rotate(var(--turn)) translate(var(--shift), calc(var(--index) * 2px));
+    }
+
+    .pack::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .pack.prize-pack {
+      box-shadow:
+        0 10px 22px rgba(244, 196, 84, 0.24),
+        0 0 0 2px rgba(255, 245, 184, 0.72),
+        inset 0 0 18px rgba(255, 255, 255, 0.22);
+      filter: saturate(1.18) brightness(1.08);
+    }
+
+    .book {
+      min-height: var(--stage-height);
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      position: relative;
+      box-shadow: none;
+    }
+
+    .book::before {
+      content: "";
+      position: absolute;
+      left: 5%;
+      right: 5%;
+      bottom: 6px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.44), transparent 68%);
+      filter: blur(12px);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .book-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 6px 8px;
+      position: relative;
+      z-index: 4;
+    }
+
+    .book-controls button {
+      min-height: 34px;
+      padding-inline: 12px;
+      font-size: 0.84rem;
+      border-color: rgba(244,196,84,0.82);
+      background: linear-gradient(#fff8df, #e9c35c);
+      box-shadow: 0 4px 12px rgba(2, 11, 28, 0.18);
+    }
+
+    .album-shell {
+      width: 100%;
+      min-height: var(--magazine-height);
+      position: relative;
+      z-index: 1;
+      display: grid;
+      align-items: stretch;
+      perspective: 1800px;
+      padding: 0 7px 12px;
+    }
+
+    .album-shell::before,
+    .album-shell::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 4px;
+      height: 18px;
+      border-radius: 0 0 12px 12px;
+      pointer-events: none;
+    }
+
+    .album-shell::before {
+      background: linear-gradient(180deg, #d3b56f, #9b7328);
+      transform: translateY(5px);
+      box-shadow: 0 12px 22px rgba(2, 8, 21, 0.32);
+    }
+
+    .album-shell::after {
+      left: 28px;
+      right: 28px;
+      bottom: 13px;
+      height: 10px;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.58) 0 1px, rgba(149,115,54,0.28) 1px 2px),
+        #f2e0b1;
+      opacity: 0.92;
+    }
+
+    .album-shell.single-page-shell::before,
+    .album-shell.single-page-shell::after {
+      display: none;
+    }
+
+    .album-spread {
+      width: 100%;
+      min-height: var(--magazine-height);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0;
+      position: relative;
+      z-index: 2;
+      border-radius: 14px;
+      background:
+        linear-gradient(90deg, #7b561c 0 10px, transparent 10px calc(100% - 10px), #7b561c calc(100% - 10px)),
+        linear-gradient(180deg, #d5b56d, #9e742b);
+      box-shadow:
+        0 24px 58px rgba(2, 8, 21, 0.48),
+        0 4px 0 #846018,
+        inset 0 0 0 2px rgba(255,242,182,0.38);
+      transform: rotateX(1deg);
+      overflow: visible;
+    }
+
+    .album-spread::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: calc(50% - 10px);
+      width: 20px;
+      z-index: 3;
+      background:
+        linear-gradient(90deg, rgba(5,15,34,0.22), rgba(255,255,255,0.2) 44%, rgba(5,15,34,0.24)),
+        linear-gradient(180deg, rgba(255,255,255,0.28), transparent 14%, transparent 86%, rgba(0,0,0,0.12));
+      box-shadow:
+        inset 4px 0 8px rgba(2, 8, 21, 0.12),
+        inset -4px 0 8px rgba(2, 8, 21, 0.12);
+      pointer-events: none;
+    }
+
+    .book-page {
+      min-height: var(--magazine-height);
+      padding: 30px 28px 24px;
+      border: 1px solid rgba(176, 130, 50, 0.48);
+      position: relative;
+      background:
+        linear-gradient(90deg, rgba(6,26,59,0.035) 0 1px, transparent 1px 100%),
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,0.82), transparent 32%),
+        linear-gradient(180deg, rgba(255,255,255,0.7), transparent 24%),
+        #fff9e8;
+      background-size: 100% 100%, 100% 100%, 100% 100%, auto;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.74),
+        inset -12px 0 18px rgba(6, 26, 59, 0.04),
+        0 0 0 1px rgba(255,255,255,0.2);
+      overflow: hidden;
+    }
+
+    .book-page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.08), transparent 8%, transparent 92%, rgba(0,0,0,0.06)),
+        repeating-linear-gradient(180deg, transparent 0 13px, rgba(168,115,28,0.045) 13px 14px);
+      mix-blend-mode: multiply;
+      opacity: 0.72;
+    }
+
+    .team-watermark {
+      width: min(74%, 360px);
+      aspect-ratio: 1;
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      z-index: 2;
+      color: var(--team-mark, rgba(6, 26, 59, 0.08));
+      opacity: 0.106;
+      transform: translate(-50%, -50%) rotate(-8deg);
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+
+    .team-watermark svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .book-page.left-page {
+      border-radius: 12px 2px 2px 12px;
+      transform-origin: right center;
+      box-shadow:
+        inset -20px 0 30px rgba(6, 26, 59, 0.1),
+        inset 0 0 0 1px rgba(255,255,255,0.72);
+    }
+
+    .book-page.right-page {
+      border-radius: 2px 12px 12px 2px;
+      transform-origin: left center;
+      box-shadow:
+        inset 20px 0 30px rgba(6, 26, 59, 0.12),
+        inset 0 0 0 1px rgba(255,255,255,0.72);
+    }
+
+    .album-spread.single-page {
+      grid-template-columns: minmax(320px, 620px);
+      justify-content: center;
+      background: transparent;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .album-spread.single-page::before {
+      display: none;
+    }
+
+    .book-cover {
+      min-height: var(--magazine-height);
+      border-radius: 12px;
+      border: 2px solid rgba(255, 230, 145, 0.82);
+      background:
+        linear-gradient(180deg, rgba(6, 26, 59, 0.12), rgba(2, 8, 21, 0.72)),
+        url("images/backers/backer.png") center / cover no-repeat;
+      box-shadow:
+        0 22px 56px rgba(2, 8, 21, 0.42),
+        inset 0 0 0 8px rgba(255, 255, 255, 0.16),
+        inset 0 0 0 12px rgba(244, 196, 84, 0.2);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      align-content: end;
+      padding: 34px;
+      color: #fff7d8;
+      text-align: center;
+      transform: rotateX(1deg);
+    }
+
+    .book-cover::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(255, 234, 168, 0.68);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .book-cover::after {
+      content: attr(data-page-label);
+      position: absolute;
+      bottom: 12px;
+      left: 0;
+      right: 0;
+      color: rgba(255, 247, 216, 0.72);
+      font-size: 0.72rem;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cover-copy {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 8px;
+      padding-bottom: 32px;
+      text-shadow: 0 3px 10px rgba(0, 0, 0, 0.62);
+    }
+
+    .cover-copy h2 {
+      margin: 0;
+      color: #fff5c8;
+      font-size: clamp(1.7rem, 3vw, 3.2rem);
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+
+    .cover-copy p {
+      margin: 0;
+      color: rgba(255, 250, 224, 0.88);
+      font-weight: 950;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .book-page::after {
+      content: attr(data-page-label);
+      position: absolute;
+      bottom: 8px;
+      color: rgba(11, 23, 48, 0.42);
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .book-page.left-page::after {
+      left: 18px;
+    }
+
+    .book-page.right-page::after {
+      right: 18px;
+    }
+
+    .book-page-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(168, 115, 28, 0.32);
+      color: var(--navy);
+      position: relative;
+      z-index: 3;
+    }
+
+    .book-page-head h3 {
+      margin: 0;
+      font-size: clamp(1.18rem, 1.8vw, 1.62rem);
+      line-height: 1;
+    }
+
+    .album-page {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-auto-rows: minmax(112px, 1fr);
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .slot,
+    .sticker {
+      min-height: 108px;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slot {
+      border: 1px dashed #b99b55;
+      background:
+        linear-gradient(transparent 49%, rgba(13, 45, 99, 0.13) 50%, transparent 51%),
+        #fffdf7;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 8px;
+      color: #897d68;
+      cursor: pointer;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7);
+      transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+    }
+
+    .slot:hover {
+      transform: translateY(-1px);
+      border-color: var(--gold-2);
+      background:
+        linear-gradient(transparent 49%, rgba(13, 45, 99, 0.16) 50%, transparent 51%),
+        #fffaf0;
+    }
+
+    .slot.filled {
+      grid-template-rows: minmax(0, 1fr) auto;
+      align-items: center;
+      justify-items: center;
+      padding: 4px 4px 3px;
+      border-style: solid;
+      color: var(--ink);
+      background: #fffdf7;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.85),
+        0 3px 10px rgba(2, 11, 28, 0.09);
+    }
+
+    .album-sticker-wrap {
+      width: min(100%, 92px);
+      aspect-ratio: 3 / 4;
+      min-height: 0;
+      align-self: center;
+      justify-self: center;
+      transform: translate(var(--placed-x), var(--placed-y)) rotate(var(--placed-rot));
+      transform-origin: center;
+    }
+
+    .album-sticker-wrap .sticker {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .slot.filled .sticker.has-art {
+      padding: 6px;
+      text-shadow: none;
+    }
+
+    .slot.filled .sticker.has-art::after {
+      inset: 68% 0 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.42));
+    }
+
+    .slot.filled .sticker.has-art .sticker-name,
+    .slot.filled .sticker.has-art .sticker-meta {
+      display: none;
+    }
+
+    .slot-caption {
+      width: 100%;
+      min-height: 20px;
+      display: grid;
+      align-content: center;
+      padding: 2px 4px 0;
+      color: var(--ink);
+      text-align: center;
+      text-shadow: none;
+    }
+
+    .slot-caption strong {
+      font-size: 0.6rem;
+      line-height: 1.05;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .slot-caption span {
+      color: var(--muted);
+      font-size: 0.53rem;
+      font-weight: 850;
+      line-height: 1.05;
+    }
+
+    .slot-number {
+      position: absolute;
+      top: 6px;
+      left: 7px;
+      font-size: 0.72rem;
+      font-weight: 950;
+      color: rgba(24, 32, 24, 0.45);
+    }
+
+    .sticker {
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      background: var(--sticker-bg);
+      color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+      display: grid;
+      align-content: end;
+      gap: 4px;
+      padding: 9px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.38);
+      cursor: pointer;
+    }
+
+    .sticker.has-art {
+      background: #fff;
+      color: #fff;
+      isolation: isolate;
+    }
+
+    .sticker.has-art::after {
+      content: "";
+      position: absolute;
+      inset: 45% 0 0;
+      z-index: 1;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.82));
+    }
+
+    .sticker.has-art.foil {
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.72);
+    }
+
+    .sticker::before {
+      content: "";
+      position: absolute;
+      inset: 12px 14px auto auto;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, transparent 0 8px, rgba(255,255,255,0.85) 9px 10px, transparent 11px),
+        conic-gradient(from 18deg, rgba(255,255,255,0.9), transparent 18deg 54deg, rgba(255,255,255,0.9) 54deg 72deg, transparent 72deg 126deg, rgba(255,255,255,0.9) 126deg 144deg, transparent 144deg 198deg, rgba(255,255,255,0.9) 198deg 216deg, transparent 216deg 270deg, rgba(255,255,255,0.9) 270deg 288deg, transparent 288deg);
+      opacity: 0.52;
+    }
+
+    .sticker.has-art::before {
+      display: none;
+    }
+
+    .portrait {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-image: var(--portrait-sheet);
+      background-size: var(--portrait-size-x) var(--portrait-size-y);
+      background-position: var(--portrait-x) var(--portrait-y);
+      background-repeat: no-repeat;
+    }
+
+    .sticker.has-art .rarity,
+    .sticker.has-art .foil-tag,
+    .sticker.has-art .foil-holo,
+    .sticker.has-art .card-stat-panel,
+    .sticker.has-art .sticker-name,
+    .sticker.has-art .sticker-meta {
+      position: relative;
+      z-index: 2;
+    }
+
+    .sticker.has-art.foil .rarity,
+    .sticker.has-art.foil .foil-tag,
+    .sticker.has-art.foil .card-stat-panel,
+    .sticker.has-art.foil .sticker-name,
+    .sticker.has-art.foil .sticker-meta {
+      z-index: 5;
+    }
+
+    .sticker-name {
+      font-weight: 950;
+      line-height: 1.05;
+    }
+
+    .sticker-meta {
+      font-size: 0.76rem;
+      font-weight: 800;
+      opacity: 0.94;
+    }
+
+    .card-stat-panel {
+      display: none;
+    }
+
+    .rarity {
+      width: 20px;
+      height: 20px;
+      position: relative;
+      border-radius: 999px;
+      background: #b8bcc4;
+      border: 2px solid rgba(255,255,255,0.88);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.52);
+      font-size: 0;
+      color: transparent;
+    }
+
+    .rarity::after {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border-radius: inherit;
+      background: rgba(255,255,255,0.42);
+    }
+
+    .sticker > .rarity {
+      display: none;
+    }
+
+    .rarity-Common {
+      background: linear-gradient(#d7dbe1, #8c939d);
+    }
+
+    .rarity-Uncommon {
+      background: linear-gradient(#53d989, #18894c);
+    }
+
+    .rarity-Rare {
+      background: radial-gradient(circle at 42% 34%, #ffffff 0 24%, #8db5ff 25% 46%, #2d6cdf 47% 100%);
+      border-color: #2d6cdf;
+      box-shadow: 0 0 0 2px rgba(45,108,223,0.42), 0 2px 8px rgba(0,0,0,0.22);
+    }
+
+    .rarity-Star {
+      background: linear-gradient(#fff2a2, #f4c454 48%, #a8731c);
+      border-color: #fff7c8;
+      box-shadow: 0 0 0 2px rgba(244,196,84,0.42), 0 2px 10px rgba(168,115,28,0.38);
+    }
+
+    .sticker.has-art .rarity-Common,
+    .slot.filled .sticker.has-art .rarity-Common,
+    .pull .sticker.has-art .rarity-Common {
+      background: linear-gradient(#d7dbe1, #8c939d);
+    }
+
+    .sticker.has-art .rarity-Uncommon,
+    .slot.filled .sticker.has-art .rarity-Uncommon,
+    .pull .sticker.has-art .rarity-Uncommon {
+      background: linear-gradient(#53d989, #18894c);
+    }
+
+    .sticker.has-art .rarity-Rare,
+    .slot.filled .sticker.has-art .rarity-Rare,
+    .pull .sticker.has-art .rarity-Rare {
+      background: radial-gradient(circle at 42% 34%, #ffffff 0 24%, #8db5ff 25% 46%, #2d6cdf 47% 100%);
+      border-color: #2d6cdf;
+      box-shadow: 0 0 0 2px rgba(45,108,223,0.42), 0 2px 8px rgba(0,0,0,0.22);
+    }
+
+    .sticker.has-art .rarity-Star,
+    .slot.filled .sticker.has-art .rarity-Star,
+    .pull .sticker.has-art .rarity-Star {
+      background: linear-gradient(#fff2a2, #f4c454 48%, #a8731c);
+      border-color: #fff7c8;
+      box-shadow: 0 0 0 2px rgba(244,196,84,0.42), 0 2px 10px rgba(168,115,28,0.38);
+    }
+
+    .sticker.rarity-card-Common {
+      border-color: #9aa1ad;
+      box-shadow: inset 0 0 0 2px rgba(154,161,173,0.72), 0 3px 8px rgba(2, 11, 28, 0.18);
+    }
+
+    .sticker.rarity-card-Uncommon {
+      border-color: #22a75e;
+      box-shadow: inset 0 0 0 2px rgba(34,167,94,0.76), 0 3px 10px rgba(16, 114, 60, 0.26);
+    }
+
+    .sticker.rarity-card-Rare {
+      border-color: #2d6cdf;
+      box-shadow: inset 0 0 0 3px rgba(45,108,223,0.78), 0 4px 12px rgba(45, 108, 223, 0.28);
+    }
+
+    .sticker.rarity-card-Star {
+      border-color: #f4c454;
+      box-shadow: inset 0 0 0 3px rgba(244,196,84,0.86), 0 4px 14px rgba(168, 115, 28, 0.34);
+    }
+
+    .sticker.foil {
+      --foil-x: 50%;
+      --foil-y: 50%;
+      --foil-rx: 0deg;
+      --foil-ry: 0deg;
+      overflow: hidden;
+      border-color: #fff1a6;
+      background-blend-mode: screen, normal;
+      box-shadow:
+        inset 0 0 0 3px rgba(255, 245, 184, 0.96),
+        inset 0 0 18px rgba(141, 181, 255, 0.38),
+        0 0 28px rgba(141, 181, 255, 0.48),
+        0 4px 16px rgba(244, 196, 84, 0.38);
+      transform: perspective(760px) rotateX(var(--foil-rx)) rotateY(var(--foil-ry));
+      transform-style: preserve-3d;
+      transition: transform 0.12s ease-out, box-shadow 0.18s ease-out, filter 0.18s ease-out;
+    }
+
+    .sticker.foil .portrait {
+      filter: saturate(1.28) contrast(1.08) brightness(1.08);
+      animation: foilPortraitGlow 5.5s linear infinite;
+    }
+
+    .sticker.foil::before {
+      content: "";
+      position: absolute;
+      inset: -35%;
+      display: block;
+      z-index: 3;
+      background:
+        linear-gradient(115deg, transparent 0 28%, rgba(255,255,255,1) 39%, rgba(255,242,162,0.96) 47%, rgba(141,181,255,0.92) 54%, rgba(137,240,189,0.76) 61%, transparent 72% 100%),
+        radial-gradient(circle at var(--foil-x) var(--foil-y), rgba(255,255,255,0.95) 0 5%, rgba(255,255,255,0.34) 15%, transparent 34%),
+        linear-gradient(
+          45deg,
+          rgba(255,87,51,0.72),
+          rgba(255,195,0,0.7),
+          rgba(218,247,166,0.64),
+          rgba(51,255,87,0.68),
+          rgba(51,255,241,0.72),
+          rgba(87,51,255,0.7),
+          rgba(255,87,51,0.72),
+          rgba(255,195,0,0.7),
+          rgba(218,247,166,0.64),
+          rgba(51,255,87,0.68),
+          rgba(51,255,241,0.72),
+          rgba(87,51,255,0.7)
+        ),
+        repeating-linear-gradient(135deg, rgba(255,255,255,0.54) 0 2px, rgba(244,196,84,0.34) 2px 4px, rgba(141,181,255,0.3) 4px 6px, rgba(137,240,189,0.22) 6px 8px, transparent 8px 11px);
+      background-size: 180% 180%, 120% 120%, 400% 400%, 100% 100%;
+      background-position: -80% 50%, center, var(--foil-x) var(--foil-y), center;
+      mix-blend-mode: normal;
+      opacity: 0.72;
+      transform: rotate(12deg);
+      animation: foilGradient 18s linear infinite;
+      pointer-events: none;
+    }
+
+    .foil-holo {
+      display: none;
+    }
+
+    .sticker.foil .foil-holo {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      border-radius: inherit;
+      pointer-events: none;
+      background:
+        linear-gradient(103deg, transparent 0 33%, rgba(255,255,255,0.95) 42%, rgba(255,244,155,0.82) 48%, rgba(123,210,255,0.72) 55%, transparent 66% 100%),
+        repeating-radial-gradient(circle at var(--foil-x) var(--foil-y), rgba(255,255,255,0.82) 0 1px, rgba(255,71,184,0.56) 2px 4px, rgba(51,255,241,0.54) 5px 7px, rgba(255,214,72,0.52) 8px 10px, transparent 11px 16px),
+        repeating-conic-gradient(from 12deg at var(--foil-x) var(--foil-y), rgba(255,0,122,0.62) 0deg 10deg, rgba(0,229,255,0.58) 16deg 26deg, rgba(255,230,67,0.56) 32deg 44deg, rgba(89,255,104,0.5) 50deg 62deg, rgba(120,70,255,0.52) 68deg 80deg, rgba(255,0,122,0.62) 86deg 96deg),
+        radial-gradient(circle at 18% 24%, rgba(255,255,255,0.9) 0 1px, transparent 2px 100%),
+        radial-gradient(circle at 74% 31%, rgba(255,255,255,0.8) 0 1px, transparent 2px 100%),
+        radial-gradient(circle at 42% 72%, rgba(255,255,255,0.86) 0 1px, transparent 2px 100%);
+      background-size: 180% 180%, 42px 42px, 72px 72px, 18px 18px, 23px 23px, 28px 28px;
+      background-position: -100% 50%, center, center, 0 0, 4px 8px, 11px 3px;
+      opacity: 0.39;
+      mix-blend-mode: normal;
+      filter: saturate(1.14) contrast(1.01);
+      animation: holoSheet 4.4s linear infinite;
+    }
+
+    .slot.filled .sticker.foil .foil-holo {
+      opacity: 0.45;
+      background-size: 180% 180%, 30px 30px, 48px 48px, 12px 12px, 15px 15px, 18px 18px;
+    }
+
+    .sticker.foil::after {
+      box-shadow:
+        inset 0 0 0 999px rgba(255,255,255,0.04),
+        inset 0 0 36px rgba(255, 242, 162, 0.2);
+    }
+
+    .sticker.foil:hover {
+      box-shadow:
+        inset 0 0 0 3px rgba(255, 245, 184, 0.96),
+        0 0 30px rgba(141, 181, 255, 0.46),
+        0 10px 24px rgba(244, 196, 84, 0.32);
+      filter: saturate(1.14) brightness(1.06);
+    }
+
+    .slot.filled .sticker.foil,
+    .pull .sticker.foil,
+    .spin-face .sticker.foil,
+    .result-sticker .sticker.foil {
+      border-color: #fff1a6;
+      box-shadow:
+        inset 0 0 0 3px rgba(255, 245, 184, 0.98),
+        inset 0 0 0 6px rgba(51, 255, 241, 0.22),
+        inset 0 0 24px rgba(141, 181, 255, 0.58),
+        0 0 34px rgba(141, 181, 255, 0.72),
+        0 5px 22px rgba(244, 196, 84, 0.54);
+    }
+
+    .sticker.foil:hover::before {
+      opacity: 0.86;
+    }
+
+    .sticker.foil .rarity::before {
+      content: "";
+      position: absolute;
+      inset: -5px;
+      border-radius: inherit;
+      background: conic-gradient(from 20deg, #fff, #8db5ff, #fff2a2, #89f0bd, #fff);
+      z-index: -1;
+      filter: blur(2px);
+    }
+
+    .foil-tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(244, 196, 84, 0.66);
+      background: linear-gradient(90deg, #fff7c8, #dff0ff, #e3ffe8);
+      color: var(--navy);
+      font-size: 0.64rem;
+      font-weight: 1000;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(2, 11, 28, 0.16);
+    }
+
+    @keyframes foilGradient {
+      0% { background-position: -80% 50%, center, 0% 50%, center; }
+      45% { background-position: 180% 50%, center, 100% 50%, center; }
+      100% { background-position: 180% 50%, center, 0% 50%, center; }
+    }
+
+    @keyframes holoSheet {
+      0% {
+        background-position: -100% 50%, 0 0, 0 0, 0 0, 4px 8px, 11px 3px;
+        filter: saturate(1.12) contrast(1.01) hue-rotate(0deg);
+      }
+      50% {
+        background-position: 130% 50%, 24px 18px, -22px 20px, 9px 7px, 18px 2px, 4px 15px;
+        filter: saturate(1.28) contrast(1.04) hue-rotate(28deg);
+      }
+      100% {
+        background-position: 230% 50%, 42px 42px, -72px 72px, 18px 18px, 27px 23px, 39px 31px;
+        filter: saturate(1.12) contrast(1.01) hue-rotate(0deg);
+      }
+    }
+
+    @keyframes foilPortraitGlow {
+      0% { filter: saturate(1.35) contrast(1.08) brightness(1.08) hue-rotate(0deg); }
+      50% { filter: saturate(1.75) contrast(1.14) brightness(1.18) hue-rotate(28deg); }
+      100% { filter: saturate(1.35) contrast(1.08) brightness(1.08) hue-rotate(0deg); }
+    }
+
+    .opened {
+      display: grid;
+      gap: 10px;
+    }
+
+    .opened-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .pull {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(244, 196, 84, 0.12), transparent 42%),
+        linear-gradient(#fffdf6, #f7ecd0);
+      padding: 9px;
+      display: grid;
+      grid-template-columns: 78px 1fr;
+      gap: 8px;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(2, 11, 28, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pull::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 5px;
+      background: linear-gradient(var(--blue), var(--gold), var(--green));
+    }
+
+    .pull.foil-pull {
+      border-color: rgba(244, 196, 84, 0.86);
+      background:
+        linear-gradient(110deg, rgba(255,255,255,0.72), rgba(141,181,255,0.22), rgba(255,242,162,0.42), rgba(137,240,189,0.22)),
+        linear-gradient(#fffdf6, #f7ecd0);
+      box-shadow: 0 6px 18px rgba(244, 196, 84, 0.28);
+    }
+
+    .pull.foil-pull::before {
+      width: 7px;
+      background: linear-gradient(#fff7c8, #8db5ff, #89f0bd, #f4c454);
+    }
+
+    .pull .sticker {
+      min-height: 92px;
+    }
+
+    .pull .sticker.has-art {
+      padding: 6px;
+      text-shadow: none;
+    }
+
+    .pull .sticker.has-art::after {
+      inset: 62% 0 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.45));
+    }
+
+    .pull .sticker.has-art .sticker-name,
+    .pull .sticker.has-art .sticker-meta {
+      display: none;
+    }
+
+    .pull .sticker.has-art .rarity {
+      text-shadow: none;
+    }
+
+    .pull-title {
+      display: grid;
+      gap: 2px;
+    }
+
+    .pull-name {
+      font-size: 1rem;
+      line-height: 1.08;
+      font-weight: 950;
+    }
+
+    .pull-meta {
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 750;
+      line-height: 1.25;
+    }
+
+    .pull-actions {
+      display: grid;
+      gap: 6px;
+    }
+
+    .pull-actions button {
+      min-height: 34px;
+      font-size: 0.88rem;
+    }
+
+    .message {
+      min-height: 46px;
+      padding: 10px;
+      border: 1px solid rgba(168, 115, 28, 0.32);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(45, 108, 223, 0.08), transparent),
+        rgba(255, 253, 246, 0.88);
+      color: #4d5d73;
+      line-height: 1.35;
+      font-weight: 720;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background: rgba(2, 8, 21, 0.78);
+    }
+
+    .modal.visible {
+      display: grid;
+    }
+
+    .splash {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(244, 196, 84, 0.22), transparent 34%),
+        linear-gradient(128deg, rgba(217, 78, 72, 0.28), transparent 32%),
+        linear-gradient(244deg, rgba(38, 169, 108, 0.24), transparent 34%),
+        linear-gradient(318deg, rgba(91, 47, 145, 0.28), transparent 38%),
+        linear-gradient(180deg, #031029, #061a3b 62%, #020815);
+    }
+
+    .splash.hidden {
+      display: none;
+    }
+
+    .splash-card {
+      width: min(920px, 100%);
+      display: grid;
+      grid-template-columns: minmax(220px, 360px) minmax(0, 1fr);
+      gap: 24px;
+      align-items: center;
+      padding: 22px;
+      border: 1px solid rgba(244, 196, 84, 0.58);
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 248, 231, 0.98)),
+        var(--paper);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.48);
+    }
+
+    .splash-art {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      border: 3px solid #f7d777;
+      border-radius: 8px;
+      background:
+        linear-gradient(rgba(3, 16, 41, 0.02), rgba(3, 16, 41, 0.08)),
+        url("images/backers/backer.png") center / cover;
+      box-shadow: 0 18px 46px rgba(2, 8, 21, 0.32);
+    }
+
+    .splash-copy {
+      display: grid;
+      gap: 14px;
+      align-content: center;
+    }
+
+    .splash-copy h1 {
+      font-size: clamp(2.7rem, 7vw, 5.8rem);
+    }
+
+    .splash-copy p {
+      max-width: 34rem;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.45;
+    }
+
+    .splash-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modal-card {
+      width: min(560px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      border-radius: 8px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 248, 231, 0.98)),
+        var(--paper);
+      border: 1px solid var(--line);
+      padding: 16px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+      display: grid;
+      gap: 14px;
+    }
+
+    .topstats-modal-card {
+      width: min(1080px, 100%);
+      max-height: calc(100vh - 24px);
+      overflow: hidden;
+      gap: 7px;
+      padding: 10px;
+    }
+
+    .achievements-modal-card {
+      width: min(980px, 100%);
+    }
+
+    #detailModal .modal-card {
+      width: min(520px, 100%);
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      overflow: visible;
+      gap: 0;
+    }
+
+    #detailModal .modal-head {
+      position: absolute;
+      right: -12px;
+      top: -12px;
+      z-index: 3;
+      justify-content: end;
+    }
+
+    #detailModal .modal-head h2 {
+      display: none;
+    }
+
+    #detailModal .close {
+      background: rgba(4, 13, 33, 0.58);
+      color: #fff7c8;
+      border-color: rgba(255, 255, 255, 0.42);
+      box-shadow: 0 6px 20px rgba(2, 11, 28, 0.28);
+    }
+
+    .achievement-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .achievement-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .achievement {
+      border: 1px solid rgba(168, 115, 28, 0.34);
+      border-radius: 8px;
+      padding: 10px;
+      display: grid;
+      gap: 6px;
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.84), rgba(255,246,221,0.72));
+      box-shadow: 0 4px 12px rgba(2, 11, 28, 0.08);
+    }
+
+    .achievement.done {
+      border-color: rgba(244, 196, 84, 0.72);
+      background:
+        linear-gradient(135deg, rgba(255,247,200,0.86), rgba(223,240,255,0.58)),
+        #fffaf0;
+    }
+
+    .achievement strong {
+      color: var(--navy);
+      line-height: 1.05;
+    }
+
+    .achievement p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.28;
+      font-weight: 720;
+    }
+
+    .achievement-reward {
+      width: fit-content;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: rgba(6, 26, 59, 0.08);
+      color: var(--navy);
+      font-size: 0.72rem;
+      font-weight: 950;
+    }
+
+    .topstats-arena {
+      display: grid;
+      gap: 6px;
+      min-height: 0;
+    }
+
+    .topstats-modal-card .modal-head {
+      min-height: 38px;
+    }
+
+    .topstats-modal-card .trump-score {
+      padding: 6px;
+    }
+
+    .topstats-modal-card .trump-card-head {
+      gap: 1px;
+    }
+
+    .topstats-modal-card .trump-card-head strong {
+      font-size: 0.95rem;
+    }
+
+    .topstats-modal-card .trump-card-head span {
+      font-size: 0.7rem;
+    }
+
+    .topstats-modal-card .trump-card .sticker {
+      width: min(198px, 100%);
+      min-height: 264px;
+    }
+
+    .topstats-modal-card .trump-hidden-card {
+      width: min(198px, 100%);
+    }
+
+    .topstats-modal-card .top-stats-result {
+      font-size: 0.78rem;
+    }
+
+    .topstats-modal-card .section-head {
+      min-height: 0;
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .modal-head-actions {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .modal-head-actions .danger {
+      min-height: 36px;
+      padding-inline: 12px;
+      font-size: 0.8rem;
+    }
+
+    .close {
+      min-width: 42px;
+      padding: 0;
+      font-size: 1.2rem;
+    }
+
+    .spin-stage {
+      min-height: 430px;
+      display: grid;
+      place-items: center;
+      perspective: 1000px;
+      background:
+        radial-gradient(circle at center, rgba(244, 196, 84, 0.24), transparent 58%),
+        #fffdf7;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    #detailModal .spin-stage {
+      min-height: 520px;
+      border: 0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(244, 196, 84, 0.14), transparent 52%);
+    }
+
+    .spin-card {
+      --detail-rx: 0deg;
+      --detail-ry: 0deg;
+      width: min(300px, 70vw);
+      height: min(400px, 58vh);
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateX(var(--detail-rx)) rotateY(var(--detail-ry)) rotateZ(-2deg);
+      transition: transform 140ms ease-out;
+    }
+
+    #detailModal .spin-card {
+      width: min(360px, 76vw);
+      height: min(480px, 68vh);
+    }
+
+    #detailModal .spin-face .sticker {
+      border: 5px solid rgba(255, 247, 200, 0.92);
+      border-radius: 12px;
+      box-shadow:
+        0 0 0 2px rgba(168, 115, 28, 0.64),
+        0 24px 70px rgba(2, 8, 21, 0.48),
+        inset 0 0 0 1px rgba(255,255,255,0.46);
+    }
+
+    .spin-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+    }
+
+    .spin-back {
+      display: none !important;
+      border-radius: 8px;
+      background:
+        linear-gradient(rgba(3, 16, 41, 0.02), rgba(3, 16, 41, 0.08)),
+        url("images/backers/backer.png") center / cover;
+      border: 3px solid #f7d777;
+      place-items: center;
+      color: transparent;
+      font-size: 1.4rem;
+      font-weight: 950;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .spin-stage.is-touching .spin-card {
+      transition: none;
+    }
+
+    .details {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    #detailModal .details {
+      display: none;
+    }
+
+    .detail {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #fffdf7;
+      display: grid;
+      gap: 4px;
+      align-content: center;
+    }
+
+    #detailModal .detail .label {
+      font-size: 0.68rem;
+    }
+
+    #detailModal .detail .value {
+      font-size: 1.02rem;
+      font-weight: 950;
+      color: var(--navy);
+      line-height: 1.1;
+    }
+
+    .detail-action {
+      grid-column: 1 / -1;
+    }
+
+    .detail.stat-bars {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 10px;
+      padding: 10px;
+      background:
+        linear-gradient(135deg, rgba(6,26,59,0.98), rgba(13,45,99,0.94)),
+        var(--navy);
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .detail.stat-bars::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 12% 15%, rgba(244,196,84,0.28), transparent 24%),
+        linear-gradient(120deg, transparent, rgba(255,255,255,0.1), transparent);
+      pointer-events: none;
+    }
+
+    .stat-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-title strong {
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 7px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .player-stat {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 86px;
+      gap: 6px;
+      padding: 8px 7px;
+      border: 1px solid rgba(244, 196, 84, 0.44);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.16);
+    }
+
+    .player-stat-name {
+      color: rgba(255,255,255,0.78);
+      font-size: 0.62rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .player-stat-value {
+      align-self: center;
+      color: #fff7cf;
+      font-size: 1.38rem;
+      font-weight: 1000;
+      text-align: center;
+      text-shadow: 0 2px 0 rgba(0,0,0,0.24);
+    }
+
+    .player-stat-track {
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.18);
+      overflow: hidden;
+    }
+
+    .player-stat-fill {
+      height: 100%;
+      width: var(--stat-width);
+      border-radius: inherit;
+      background: linear-gradient(90deg, #2ee08f, var(--gold));
+      box-shadow: 0 0 14px rgba(244, 196, 84, 0.44);
+    }
+
+    .result-layout {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .result-preview {
+      height: 252px;
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fffdf7;
+      overflow: hidden;
+    }
+
+    .result-target {
+      position: absolute;
+      inset: 10px;
+      border: 2px dashed #9d8f76;
+      border-radius: 8px;
+      background: rgba(244, 196, 84, 0.12);
+    }
+
+    .miss-band {
+      position: absolute;
+      background: rgba(255, 0, 38, 0.72);
+      box-shadow: 0 0 10px rgba(255, 0, 38, 0.42);
+      pointer-events: none;
+    }
+
+    .miss-band.top {
+      left: 0;
+      right: 0;
+      top: 0;
+      height: var(--miss-top);
+    }
+
+    .miss-band.right {
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--miss-right);
+    }
+
+    .miss-band.bottom {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: var(--miss-bottom);
+    }
+
+    .miss-band.left {
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--miss-left);
+    }
+
+    .result-sticker {
+      width: 158px;
+      height: 214px;
+      position: absolute;
+      left: calc(50% - 79px);
+      top: calc(50% - 107px);
+      transform: translate(var(--result-x), var(--result-y)) rotate(var(--result-rot));
+      transform-origin: center;
+    }
+
+    .result-sticker .sticker {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+    }
+
+    .result-score {
+      display: grid;
+      gap: 10px;
+    }
+
+    .accuracy-number {
+      font-size: clamp(3rem, 10vw, 5rem);
+      line-height: 0.9;
+      font-weight: 950;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .quality-name {
+      width: max-content;
+      max-width: 100%;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: linear-gradient(#ffe793, var(--gold) 55%, #d79b2b);
+      border: 1px solid var(--gold-2);
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    .place-stage {
+      height: min(420px, 62vh);
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 50% 50%, transparent 0 54px, rgba(255,255,255,0.76) 55px 57px, transparent 58px),
+        linear-gradient(90deg, transparent calc(50% - 1px), rgba(255,255,255,0.78) calc(50% - 1px), rgba(255,255,255,0.78) calc(50% + 1px), transparent calc(50% + 1px)),
+        linear-gradient(0deg, transparent 7%, rgba(255,255,255,0.72) 7% 8%, transparent 8% 92%, rgba(255,255,255,0.72) 92% 93%, transparent 93%),
+        linear-gradient(90deg, transparent 8%, rgba(255,255,255,0.72) 8% 9%, transparent 9% 91%, rgba(255,255,255,0.72) 91% 92%, transparent 92%),
+        repeating-linear-gradient(90deg, #147346 0 54px, #1d8b55 54px 108px);
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    .place-stage::before,
+    .place-stage::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      width: 168px;
+      height: 64px;
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .place-stage::before {
+      top: -2px;
+      border-top: 0;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .place-stage::after {
+      bottom: -2px;
+      border-bottom: 0;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .target-slot {
+      width: 178px;
+      height: 238px;
+      position: absolute;
+      left: calc(50% - 89px);
+      top: calc(50% - 119px);
+      border: 2px dashed #9d8f76;
+      border-radius: 8px;
+      background: rgba(255, 248, 231, 0.2);
+      box-shadow:
+        0 0 0 999px rgba(3, 16, 41, 0.08),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+    }
+
+    .placement-sticker {
+      width: 178px;
+      height: 238px;
+      position: absolute;
+      left: calc(50% - 89px);
+      top: calc(50% - 119px);
+      transform: translate(var(--dx), var(--dy)) rotate(var(--rot));
+      pointer-events: none;
+    }
+
+    .placement-sticker .sticker,
+    .spin-face .sticker {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+    }
+
+    .spin-face .sticker {
+      align-content: stretch;
+      grid-template-rows: auto 1fr auto;
+      padding: 16px;
+    }
+
+    .spin-face .sticker.has-art::after {
+      inset: 48% 0 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.68) 42%, rgba(0, 0, 0, 0.92));
+    }
+
+    .spin-face .sticker-name {
+      align-self: end;
+      font-size: 1.28rem;
+      line-height: 1;
+    }
+
+    .spin-face .sticker-meta {
+      font-size: 0.86rem;
+    }
+
+    .spin-face .card-stat-panel {
+      align-self: end;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 5px;
+      width: calc(100% - 16px);
+      justify-self: center;
+      margin-top: 8px;
+      padding: 8px 7px;
+      border: 1px solid rgba(255, 255, 255, 0.46);
+      border-radius: 6px;
+      background: rgba(4, 13, 33, 0.78);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
+      text-shadow: none;
+    }
+
+    .spin-face .sticker.has-card-action .card-stat-panel {
+      width: calc(100% - 40px);
+      justify-self: end;
+      margin-right: 0;
+      padding-left: 7px;
+    }
+
+    .card-stat {
+      min-width: 0;
+      display: grid;
+      gap: 1px;
+      justify-items: center;
+      color: #fff;
+    }
+
+    .card-stat span {
+      font-size: 0.58rem;
+      font-weight: 950;
+      line-height: 1;
+      opacity: 0.78;
+      text-transform: uppercase;
+    }
+
+    .card-stat strong {
+      font-size: 1.05rem;
+      line-height: 1;
+      color: #fff7c8;
+    }
+
+    .card-value-badge,
+    .card-action-icon {
+      display: none;
+    }
+
+    .spin-face .card-value-badge,
+    .spin-face .card-action-icon {
+      position: absolute;
+      z-index: 6;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.58);
+      background: rgba(4, 13, 33, 0.78);
+      color: #fff7c8;
+      box-shadow: 0 4px 14px rgba(2, 11, 28, 0.24), inset 0 1px 0 rgba(255,255,255,0.18);
+      text-shadow: none;
+    }
+
+    .spin-face .card-value-badge {
+      top: 10px;
+      right: 10px;
+      min-width: 54px;
+      min-height: 32px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 1000;
+      background: rgba(4, 13, 33, 0.38);
+    }
+
+    .spin-face .card-action-icon {
+      left: 4px;
+      bottom: 4px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      color: #fff7c8;
+      font-size: 1.05rem;
+      font-weight: 1000;
+    }
+
+    .spin-face .card-action-icon.replace {
+      background: rgba(4, 13, 33, 0.38);
+    }
+
+    .spin-face .card-action-icon.remove {
+      background: rgba(4, 13, 33, 0.38);
+      color: #ffe3df;
+    }
+
+    .spin-face .card-action-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2.4;
+      fill: none;
+      pointer-events: none;
+    }
+
+    .placement-sticker .sticker {
+      border-width: 3px;
+      padding: 14px;
+      font-size: 1.05rem;
+    }
+
+    .reveal-card {
+      width: min(310px, 78vw);
+      height: min(410px, 66vh);
+      justify-self: center;
+      perspective: 900px;
+    }
+
+    .reveal-card .sticker,
+    .reveal-backer {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      border-radius: 8px;
+    }
+
+    .reveal-backer {
+      border: 3px solid #f7d777;
+      background:
+        linear-gradient(rgba(3, 16, 41, 0.02), rgba(3, 16, 41, 0.08)),
+        url("images/backers/backer.png") center / cover;
+      box-shadow: 0 18px 48px rgba(2, 8, 21, 0.34);
+    }
+
+    .reveal-card.revealed {
+      animation: revealPop 820ms ease both;
+    }
+
+    .reveal-card.teasing {
+      animation: suspensePulse 900ms ease-in-out infinite;
+    }
+
+    .commentary-box {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: linear-gradient(#fffdf6, #f7ecd0);
+      display: grid;
+      gap: 5px;
+      text-align: center;
+    }
+
+    .commentary-line {
+      margin: 0;
+      font-size: clamp(1.1rem, 3vw, 1.55rem);
+      line-height: 1.1;
+      font-weight: 950;
+      color: var(--navy);
+    }
+
+    .commentary-sub {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    @keyframes revealPop {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.96);
+        filter: blur(8px) brightness(1.18);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0) brightness(1);
+      }
+    }
+
+    @keyframes suspensePulse {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        filter: brightness(1);
+      }
+
+      50% {
+        transform: translateY(-4px) scale(1.015);
+        filter: brightness(1.08);
+      }
+    }
+
+    @media (max-width: 1080px) {
+      .game-banner {
+        grid-template-columns: 74px 1fr;
+      }
+
+      .banner-pill {
+        grid-column: 1 / -1;
+      }
+
+      .app {
+        grid-template-columns: 1fr;
+        max-width: 760px;
+      }
+
+      .panel {
+        order: 2;
+      }
+
+      .book {
+        order: 1;
+      }
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 10px;
+      }
+
+      .game-banner {
+        grid-template-columns: 1fr;
+        text-align: center;
+        justify-items: center;
+      }
+
+      .banner-card {
+        width: 88px;
+      }
+
+      .album-page {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .album-spread {
+        grid-template-columns: 1fr;
+      }
+
+      .album-spread.single-page {
+        grid-template-columns: minmax(0, min(100%, 420px));
+        justify-content: center;
+      }
+
+      .book-page,
+      .book-page.left-page,
+      .book-page.right-page {
+        border-radius: 8px;
+      }
+
+      .pull {
+        grid-template-columns: 1fr;
+      }
+
+      .pull .sticker {
+        min-height: 128px;
+      }
+
+      .spin-stage {
+        min-height: 360px;
+      }
+
+      .spin-card {
+        width: min(260px, 72vw);
+        height: min(347px, 52vh);
+      }
+
+      .details,
+      .stats,
+      .result-layout,
+      .trump-table,
+      .achievement-summary,
+      .achievement-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .trump-scoreboard,
+      .topstats-match-meta,
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topstats-modal-card {
+        overflow: auto;
+      }
+
+      .topstats-modal-card .compact-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .topstats-modal-card .compact-stat {
+        grid-template-columns: minmax(0, 1fr) auto;
+        justify-items: stretch;
+        text-align: left;
+      }
+
+      .topstats-team-picker {
+        grid-template-columns: 1fr;
+      }
+
+      .topstats-team-grid {
+        max-height: 260px;
+      }
+
+      .keepy-widget {
+        inset: 0;
+      }
+
+      .keepy-score {
+        right: 10px;
+        bottom: 84px;
+      }
+
+      .soccer-ball {
+        width: 62px;
+        height: 62px;
+      }
+
+      .trivia-options {
+        grid-template-columns: 1fr;
+      }
+
+      .splash-card {
+        grid-template-columns: 1fr;
+        max-width: 430px;
+      }
+
+      .splash-art {
+        max-height: 46vh;
+        width: min(260px, 100%);
+        justify-self: center;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .panel,
+      .keepy-widget,
+      .modal {
+        display: none !important;
+      }
+
+      .app {
+        display: block;
+        width: 100%;
+      }
+
+      .book {
+        box-shadow: none;
+        border: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="splash" id="splash" aria-label="Full Album FC start screen">
+    <div class="splash-card">
+      <div class="splash-art" aria-hidden="true"></div>
+      <div class="splash-copy">
+        <h1>Full Album FC</h1>
+        <p>Rip packs, chase the missing slots, and place every sticker like the album depends on it.</p>
+        <div class="splash-actions">
+          <button class="primary" id="startGame" type="button">Start Album</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <header class="game-banner" aria-label="Full Album FC">
+    <div class="banner-card" aria-hidden="true"></div>
+    <div class="banner-copy">
+      <h1>Full Album FC</h1>
+      <p>Rip packs, trade duplicates, place stickers, and finish the album one glorious pull at a time.</p>
+    </div>
+    <div class="banner-pill">Sticker Collection</div>
+  </header>
+
+  <main class="app">
+    <section class="panel hero-panel" aria-label="Game controls">
+      <div class="section economy-section">
+        <div class="section-head"><span class="section-title">Club Desk</span></div>
+        <div class="stats">
+          <div class="stat"><span class="label">Cash</span><span class="value" id="cash">$0</span></div>
+          <div class="stat"><span class="label">Packs</span><span class="value" id="packCount">0</span></div>
+          <div class="stat"><span class="label">Album</span><span class="value" id="progress">0/80</span></div>
+          <div class="stat"><span class="label">Need Boost</span><span class="value" id="luck">0%</span></div>
+        </div>
+        <div class="actions">
+          <button class="primary" id="buyPack" type="button">Buy Pack $30</button>
+          <button type="button" data-open-achievements>Trophy Room</button>
+        </div>
+      </div>
+
+      <div class="section shop-section upgrades" aria-label="Paid unlocks" data-collapsible="shop">
+        <button class="section-toggle" type="button" data-toggle-section="shop"><span class="section-title">Club Shop</span></button>
+        <div class="section-body">
+          <div class="upgrade">
+            <div class="upgrade-copy">
+              <strong>Fast Reveal</strong>
+              <span>Speed up pack suspense.</span>
+            </div>
+            <div class="upgrade-control" id="fastRevealControl"></div>
+          </div>
+          <div class="upgrade">
+            <div class="upgrade-copy">
+              <strong>Steady Hand</strong>
+              <span>Slow sticker drift while placing.</span>
+            </div>
+            <div class="upgrade-control" id="steadyHandControl"></div>
+          </div>
+          <div class="upgrade">
+            <div class="upgrade-copy">
+              <strong>Top Stats</strong>
+              <span>Unlock the team-vs-team stats game.</span>
+            </div>
+            <div class="upgrade-control" id="topStatsControl"></div>
+          </div>
+          <div class="upgrade">
+            <div class="upgrade-copy">
+              <strong>Sticker Lift</strong>
+              <span>Remove a placed sticker after confirmation.</span>
+            </div>
+            <div class="upgrade-control" id="stickerLiftControl"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section topstats-section top-stats" id="topStatsPanel" aria-label="Top Stats game" data-collapsible="topstats"></div>
+
+      <div class="section trivia-section trivia" aria-label="Earn cash trivia">
+        <div class="section-head"><span class="section-title">Earn $1 Trivia</span></div>
+        <button type="button" data-open-trivia>Open Trivia</button>
+      </div>
+
+      <p class="message" id="message">You have enough cash for three packs. A perfect placement makes future packs a little kinder.</p>
+    </section>
+
+    <section class="book" aria-label="Sticker album">
+      <div class="book-controls">
+        <button type="button" data-book-prev>Previous</button>
+        <button type="button" data-book-next>Next</button>
+      </div>
+      <div class="album-shell" id="albumShell">
+        <div class="album-spread" id="bookSpread"></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="Loose stickers">
+      <div class="section stack-section">
+        <div class="section-head"><span class="section-title">Unopened Stack</span></div>
+        <div class="pack-stack" id="packStack" aria-label="Unopened packs"></div>
+        <button id="openPack" type="button">Open Pack</button>
+      </div>
+      <div class="section-head">
+        <span class="section-title">Loose Stickers</span>
+      </div>
+      <div class="opened" id="opened">
+        <p class="empty-note">Buy and open a pack to reveal five stickers.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="keepy-widget" id="keepyWidget" aria-label="Keepy uppies micro game">
+    <div class="keepy-score" aria-live="polite">
+      <span>Keepy Uppies</span>
+      <small>Best <b id="keepyBest">0</b></small>
+      <strong id="keepyScore">0</strong>
+    </div>
+    <button class="soccer-ball" id="soccerBall" type="button" aria-label="Kick the soccer ball">
+      <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="keepyBallClip">
+            <circle cx="60" cy="60" r="55"></circle>
+          </clipPath>
+          <radialGradient id="keepyBallShade" cx="34%" cy="25%" r="74%">
+            <stop offset="0%" stop-color="#ffffff"></stop>
+            <stop offset="54%" stop-color="#f5f6f0"></stop>
+            <stop offset="80%" stop-color="#d9dee3"></stop>
+            <stop offset="100%" stop-color="#9ca5af"></stop>
+          </radialGradient>
+          <radialGradient id="keepyPanelShade" cx="28%" cy="20%" r="92%">
+            <stop offset="0%" stop-color="#2b3038"></stop>
+            <stop offset="62%" stop-color="#0d1118"></stop>
+            <stop offset="100%" stop-color="#020307"></stop>
+          </radialGradient>
+          <linearGradient id="keepySeamShade" x1="22" y1="16" x2="98" y2="104" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#f7f8f4"></stop>
+            <stop offset="100%" stop-color="#cfd5d8"></stop>
+          </linearGradient>
+        </defs>
+        <circle cx="60" cy="60" r="56" fill="#f6f7f1"></circle>
+        <g clip-path="url(#keepyBallClip)">
+          <circle cx="60" cy="60" r="56" fill="url(#keepyBallShade)"></circle>
+          <path d="M60 10 L77 22 L71 42 L49 42 L43 22 Z" fill="url(#keepyPanelShade)"></path>
+          <path d="M104 34 L119 56 L105 78 L84 71 L81 49 Z" fill="url(#keepyPanelShade)"></path>
+          <path d="M85 99 L62 116 L39 101 L47 80 L72 80 Z" fill="url(#keepyPanelShade)"></path>
+          <path d="M16 34 L1 56 L15 78 L36 71 L39 49 Z" fill="url(#keepyPanelShade)"></path>
+          <path d="M60 38 L80 52 L72 75 L48 75 L40 52 Z" fill="url(#keepyPanelShade)"></path>
+
+          <path d="M60 10 L77 22 L93 20 L104 34 M77 22 L71 42 L81 49 L104 34
+                   M71 42 L80 52 L81 49 M80 52 L72 75 L84 71 L105 78
+                   M72 75 L72 80 L85 99 M72 80 L62 116 M48 75 L47 80 L39 101
+                   M48 75 L40 52 L39 49 M40 52 L49 42 L43 22 M43 22 L27 20 L16 34
+                   M39 49 L16 34 M36 71 L15 78 M36 71 L48 75"
+                fill="none" stroke="#111821" stroke-opacity="0.9" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M60 38 L80 52 L72 75 L48 75 L40 52 Z
+                   M60 10 L77 22 L71 42 L49 42 L43 22 Z
+                   M104 34 L119 56 L105 78 L84 71 L81 49 Z
+                   M85 99 L62 116 L39 101 L47 80 L72 80 Z
+                   M16 34 L1 56 L15 78 L36 71 L39 49 Z"
+                fill="none" stroke="#05070b" stroke-opacity="0.7" stroke-width="1.3" stroke-linejoin="round"></path>
+          <path d="M50 43 C43 42 36 44 29 49 M70 43 C78 42 85 44 92 49
+                   M39 55 C34 62 33 69 36 77 M81 55 C86 62 87 69 84 77
+                   M48 77 C44 84 43 91 46 99 M72 77 C76 84 77 91 74 99
+                   M43 23 C34 28 26 35 21 45 M77 23 C86 28 94 35 99 45"
+                fill="none" stroke="url(#keepySeamShade)" stroke-opacity="0.7" stroke-width="1.8" stroke-linecap="round"></path>
+          <path d="M60 38 L80 52 L72 75 L48 75 L40 52 Z"
+                fill="none" stroke="#ffffff" stroke-opacity="0.16" stroke-width="1.6" stroke-linejoin="round"></path>
+          <ellipse cx="38" cy="24" rx="27" ry="18" fill="#ffffff" opacity="0.36" transform="rotate(-24 38 24)"></ellipse>
+          <path d="M81 84 C99 88 108 100 96 116 C111 105 119 82 114 57 C110 69 100 80 81 84Z" fill="#0c1420" opacity="0.18"></path>
+        </g>
+        <circle cx="60" cy="60" r="55" fill="none" stroke="#ffffff" stroke-width="2.6" opacity="0.75"></circle>
+        <circle cx="60" cy="60" r="55" fill="none" stroke="#07101e" stroke-width="1.4" opacity="0.26"></circle>
+      </svg>
+    </button>
+  </div>
+
+  <div class="modal" id="revealModal" role="dialog" aria-modal="true" aria-label="Open sticker pack">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2 id="revealTitle">Pack Opening</h2>
+        <button class="close" type="button" data-close="reveal" aria-label="Close pack reveal">&times;</button>
+      </div>
+      <div class="reveal-card" id="revealCard">
+        <div class="reveal-backer" id="revealBacker" aria-label="Unopened sticker card"></div>
+      </div>
+      <div class="commentary-box">
+        <p class="commentary-line" id="commentaryLine">The pack is on the table.</p>
+        <p class="commentary-sub" id="commentarySub">Rarest sticker reveals last.</p>
+      </div>
+      <button class="primary" id="revealNext" type="button">Rip Pack</button>
+    </div>
+  </div>
+
+  <div class="modal" id="detailModal" role="dialog" aria-modal="true" aria-label="Sticker details">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>Sticker Details</h2>
+        <button class="close" type="button" data-close="detail" aria-label="Close details">&times;</button>
+      </div>
+        <div class="spin-stage" id="detailStage">
+          <div class="spin-card" id="detailSpinCard">
+            <div class="spin-face" id="detailSticker"></div>
+            <div class="spin-face spin-back">World Sticker Album</div>
+        </div>
+      </div>
+      <div class="details" id="detailInfo"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="destroyModal" role="dialog" aria-modal="true" aria-label="Confirm sticker removal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>Remove Sticker?</h2>
+        <button class="close" type="button" data-close="destroy" aria-label="Cancel sticker removal">&times;</button>
+      </div>
+      <p class="message" id="destroyCopy">This will destroy the placed sticker.</p>
+      <div class="actions">
+        <button type="button" data-close="destroy">Cancel</button>
+        <button class="danger" type="button" data-confirm-destroy>Destroy Sticker</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="placeModal" role="dialog" aria-modal="true" aria-label="Place sticker">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>Line Up The Sticker</h2>
+        <button class="close" type="button" data-close="place" aria-label="Cancel placement">&times;</button>
+      </div>
+      <div class="place-stage" id="placeStage">
+        <div class="target-slot"></div>
+        <div class="placement-sticker" id="placementSticker"></div>
+      </div>
+      <p class="subtitle">Move your mouse or finger inside the box to steady the sticker, then click or tap to place it.</p>
+      <button class="primary" id="placeNow" type="button">Place Now</button>
+    </div>
+  </div>
+
+  <div class="modal" id="topStatsModal" role="dialog" aria-modal="true" aria-label="Top Stats match">
+    <div class="modal-card topstats-modal-card">
+      <div class="modal-head">
+        <h2>Top Stats</h2>
+        <div class="modal-head-actions">
+          <button class="danger" id="topStatsForfeit" type="button" data-forfeit-topstats hidden>Forfeit</button>
+          <button class="close" type="button" data-close="topstats" aria-label="Close Top Stats">&times;</button>
+        </div>
+      </div>
+      <div class="topstats-arena top-stats" id="topStatsArena"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="triviaModal" role="dialog" aria-modal="true" aria-label="Earn cash trivia">
+    <div class="modal-card trivia-modal-card">
+      <div class="modal-head">
+        <h2>Earn $1 Trivia</h2>
+        <button class="close" type="button" data-close="trivia" aria-label="Close trivia">&times;</button>
+      </div>
+      <div class="trivia-modal-body trivia">
+        <p class="trivia-question" id="triviaQuestion">Which team is this player on?</p>
+        <div class="trivia-options" id="triviaOptions"></div>
+        <p class="trivia-status" id="triviaStatus">Get 3 correct to earn $1.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="achievementsModal" role="dialog" aria-modal="true" aria-label="Trophy room">
+    <div class="modal-card achievements-modal-card">
+      <div class="modal-head">
+        <h2>Trophy Room</h2>
+        <button class="close" type="button" data-close="achievements" aria-label="Close trophy room">&times;</button>
+      </div>
+      <div id="achievementsRoom"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="resultModal" role="dialog" aria-modal="true" aria-label="Placement result">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h2>Sticker Placed</h2>
+        <button class="close" type="button" data-close="result" aria-label="Close result">&times;</button>
+      </div>
+      <div class="result-layout">
+        <div class="result-preview">
+          <div class="result-target" id="resultTarget">
+            <span class="miss-band top"></span>
+            <span class="miss-band right"></span>
+            <span class="miss-band bottom"></span>
+            <span class="miss-band left"></span>
+          </div>
+          <div class="result-sticker" id="resultSticker"></div>
+        </div>
+        <div class="result-score">
+          <span class="quality-name" id="resultQuality">Clean</span>
+          <div class="accuracy-number" id="resultAccuracy">0%</div>
+          <p class="subtitle" id="resultCopy">Luck bonus added.</p>
+          <button class="primary" type="button" data-close="result">Back to Book</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const TEAMS = [
+      { name: "Northbridge FC", colors: ["#2d6cdf", "#ffffff"], accent: "#f4bd3f", sheet: "images/teams/team-northbridge.png" },
+      { name: "Harbor United", colors: ["#1f8f55", "#101820"], accent: "#ffffff", sheet: "images/teams/team-harbor.png" },
+      { name: "Riverside Rovers", colors: ["#d94e48", "#fff1d1"], accent: "#2d6cdf", sheet: "images/teams/team-roadside.png" },
+      { name: "Crown City SC", colors: ["#392f5a", "#f4bd3f"], accent: "#ffffff", sheet: "images/teams/team-crowncity.png" },
+      { name: "Aurora United", colors: ["#5e83ff", "#d9f0ff"], accent: "#ffe97f", sheet: "images/teams/team-aurora.png" },
+      { name: "Blaze FC", colors: ["#ff6a28", "#111111"], accent: "#ffd255", sheet: "images/teams/team-blaze.png" },
+      { name: "Cyclone City", colors: ["#2d9eff", "#ffffff"], accent: "#b8d8ff", sheet: "images/teams/team-cyclone.png" },
+      { name: "Dragonheart SC", colors: ["#b03c2f", "#111111"], accent: "#f4b842", sheet: "images/teams/team-dragon.png" },
+      { name: "Eclipse Rovers", colors: ["#191923", "#4f4f7a"], accent: "#d9d2ff", sheet: "images/teams/team-eclipse.png" },
+      { name: "Falcon FC", colors: ["#0d3b27", "#89c687"], accent: "#f4f4f4", sheet: "images/teams/team-falcon.png" },
+      { name: "Guardian Athletic", colors: ["#101820", "#a6afb9"], accent: "#f3c533", sheet: "images/teams/team-guardian.png" },
+      { name: "Horizon Wanderers", colors: ["#1f4f6d", "#71a7d3"], accent: "#f4e8c3", sheet: "images/teams/team-horizon.png" },
+      { name: "Inferno United", colors: ["#8d2600", "#f9c280"], accent: "#ffda73", sheet: "images/teams/team-inferno.png" },
+      { name: "Jaguar City", colors: ["#1e2124", "#6b7428"], accent: "#f4d888", sheet: "images/teams/team-jaguar.png" }
+    ];
+    const TOTAL_PAGES = TEAMS.length;
+
+
+    const FIRST_NAMES = ["Milo", "Rafa", "Theo", "Noah", "Leo", "Iker", "Nico", "Marco", "Jonas", "Ari", "Dante", "Enzo", "Luca", "Mateo", "Owen", "Felix", "Elias", "Tomas", "Kai", "Santi", "Bruno", "Diego", "Amir", "Jules"];
+    const LAST_NAMES = ["Vale", "Costa", "Reed", "Stone", "Silva", "Marin", "Pace", "Kane", "Lopez", "Grant", "Nolan", "Vega", "Frost", "Bello", "Santos", "Rossi", "Hayes", "Meyer", "Kovac", "Diaz", "Shaw", "Torres", "King", "Baker"];
+    const POSITIONS = ["GK", "DF", "DF", "DF", "DF", "MF", "MF", "MF", "MF", "MF", "MF", "FW", "FW", "FW", "DF", "MF", "FW", "GK", "DF", "MF"];
+    const RARITIES = {
+      Common: { value: 6, weight: 58 },
+      Uncommon: { value: 11, weight: 28 },
+      Rare: { value: 22, weight: 10 },
+      Star: { value: 42, weight: 4 }
+    };
+
+    const PACK_PRICE = 30;
+    const PACK_SIZE = 5;
+    const PAGE_SIZE = 20;
+    const RARITY_RANK = { Common: 1, Uncommon: 2, Rare: 3, Star: 4 };
+    const STORAGE_KEY = "full-album-fc-save-v1";
+    const KEEPY_BEST_KEY = `${STORAGE_KEY}-keepy-best`;
+    const UPGRADE_COST = 150;
+    const TOP_STATS_UNLOCK_COST = 100;
+    const TOP_STATS_COST = PACK_PRICE;
+    const TOP_STATS_CATEGORIES = [
+      { key: "speed", label: "Speed" },
+      { key: "accuracy", label: "Accuracy" },
+      { key: "control", label: "Control" },
+      { key: "defense", label: "Defense" },
+      { key: "placement", label: "Placement" }
+    ];
+    const TOP_STATS_DECK_SIZE = 12;
+    const TOP_STATS_MAX_ROUNDS = 24;
+    const FOIL_CHANCE = 0.06;
+    const PRIZE_FOIL_CHANCE = 0.18;
+    const ACHIEVEMENTS = [
+      { id: "pack_1", name: "Wrapper Opened", desc: "Open 1 pack.", reward: { cash: 5 }, test: () => state.stats.packsOpened >= 1 },
+      { id: "pack_10", name: "Pocket Money Season", desc: "Open 10 packs.", reward: { cash: 20 }, test: () => state.stats.packsOpened >= 10 },
+      { id: "pack_100", name: "Sticker Shop Regular", desc: "Open 100 packs.", reward: { prizePacks: 2 }, test: () => state.stats.packsOpened >= 100 },
+      { id: "pack_1000", name: "Warehouse Account", desc: "Open 1000 packs.", reward: { prizePacks: 12, luck: 2 }, test: () => state.stats.packsOpened >= 1000 },
+      { id: "unlock_1", name: "First Upgrade", desc: "Purchase any unlock.", reward: { cash: 20 }, test: () => state.stats.unlocksBought >= 1 },
+      { id: "unlock_all", name: "Club Shop Complete", desc: "Purchase every unlock.", reward: { prizePacks: 3 }, test: () => Object.values(state.upgrades).every(upgrade => upgrade.owned) },
+      { id: "topstats_unlock", name: "Stats Table", desc: "Unlock Top Stats.", reward: { cash: 30 }, test: () => state.upgrades.topStats.owned },
+      { id: "topstats_first", name: "First Top Stats Win", desc: "Win your first Top Stats game.", reward: { prizePacks: 1 }, test: () => state.stats.topStatsWon >= 1 },
+      { id: "topstats_10", name: "Derby Specialist", desc: "Win 10 Top Stats games.", reward: { prizePacks: 3 }, test: () => state.stats.topStatsWon >= 10 },
+      { id: "topstats_100", name: "Table Topper", desc: "Win 100 Top Stats games.", reward: { prizePacks: 10, luck: 1 }, test: () => state.stats.topStatsWon >= 100 },
+      { id: "topstats_1000", name: "Dynasty Mode", desc: "Win 1000 Top Stats games.", reward: { prizePacks: 40, luck: 3 }, test: () => state.stats.topStatsWon >= 1000 },
+      { id: "topstats_played", name: "Played A Match", desc: "Finish a Top Stats game.", reward: { cash: 15 }, test: () => state.stats.topStatsPlayed >= 1 },
+      { id: "trivia_1", name: "Pub Quiz Payout", desc: "Win trivia cash once.", reward: { cash: 5 }, test: () => state.stats.triviaWon >= 1 },
+      { id: "trivia_10", name: "Team Sheet Memory", desc: "Win trivia cash 10 times.", reward: { cash: 30 }, test: () => state.stats.triviaWon >= 10 },
+      { id: "trivia_100", name: "Football Brain", desc: "Win trivia cash 100 times.", reward: { prizePacks: 2 }, test: () => state.stats.triviaWon >= 100 },
+      { id: "trivia_1000", name: "Walking Almanac", desc: "Win trivia cash 1000 times.", reward: { prizePacks: 20, luck: 2 }, test: () => state.stats.triviaWon >= 1000 },
+      { id: "perfect_place", name: "Dead Centre", desc: "Land a 100% sticker placement.", reward: { luck: 0.5 }, test: () => state.stats.perfectPlacements >= 1 },
+      { id: "perfect_10", name: "Steady Hands", desc: "Land 10 perfect placements.", reward: { prizePacks: 1 }, test: () => state.stats.perfectPlacements >= 10 },
+      { id: "team_full", name: "Team Page Complete", desc: "Fully fill any team page.", reward: { cash: 50 }, test: () => completedTeamIndexes().length >= 1 },
+      { id: "teams_2", name: "Two Clubs Complete", desc: "Fully fill 2 teams.", reward: { prizePacks: 2 }, test: () => completedTeamIndexes().length >= 2 },
+      { id: "album_complete", name: "Sticker Magazine Completed", desc: "Fill every slot in the magazine.", reward: { prizePacks: 5, luck: 2 }, test: () => state.placed.size >= TOTAL_PAGES * PAGE_SIZE },
+      { id: "foil_1", name: "First Foil", desc: "Place your first foil sticker.", reward: { cash: 25 }, test: () => foilPlacedCount() >= 1 },
+      { id: "foil_10", name: "Shiny Spine", desc: "Place 10 foil stickers.", reward: { prizePacks: 2 }, test: () => foilPlacedCount() >= 10 },
+      { id: "foil_team", name: "Foil Team Page", desc: "Complete any team page in foils.", reward: { prizePacks: 8, luck: 2 }, test: () => foilCompletedTeamIndexes().length >= 1 },
+      { id: "foil_album", name: "100% Foil Album", desc: "Every slot is filled with a foil sticker.", reward: { prizePacks: 25, luck: 5 }, test: () => foilPlacedCount() >= TOTAL_PAGES * PAGE_SIZE },
+      { id: "sell_25", name: "Market Stall", desc: "Sell 25 stickers.", reward: { cash: 20 }, test: () => state.stats.stickersSold >= 25 },
+      { id: "cash_500", name: "Transfer Budget", desc: "Hold $500 cash.", reward: { prizePacks: 1 }, test: () => state.cash >= 500 }
+    ];
+    const COMMENTARY = {
+      needed: [
+        "What a pull! He certainly needed that one.",
+        "That fills a gap in the album, and the crowd knows it.",
+        "Lovely bit of business. Straight into contention for a spot.",
+        "He has been waiting on that shirt number all afternoon.",
+        "That is not just a sticker, that is progress.",
+        "A proper album moment. Needed, wanted, delivered.",
+        "There it is! The book has been crying out for him.",
+        "You can feel the momentum changing with that pull.",
+        "That one has a place waiting, no doubt about it.",
+        "A tidy arrival for the collection. Needed and neatly timed."
+      ],
+      duplicate: [
+        "We've been here before. Same old, same old.",
+        "Another classic performance, but the album already has him.",
+        "Useful for the market, less useful for the page.",
+        "A familiar face comes jogging out again.",
+        "The duplicate pile gets another veteran.",
+        "Not the debut we wanted, but still worth a few coins.",
+        "He has turned up twice this season already.",
+        "A repeat showing. The seller's booth will be watching.",
+        "Good player, wrong moment.",
+        "The album says no, the wallet says maybe."
+      ],
+      rare: [
+        "Oh, that has a bit of shine about it!",
+        "Listen to the noise. That is a serious pull.",
+        "Big card energy from the middle of the pack.",
+        "The scouts had that one circled.",
+        "A premium touch, and beautifully taken.",
+        "That is the sort of pull that changes the mood."
+      ],
+      star: [
+        "Stop the presses! A star sticker from the top drawer.",
+        "That is box-office. The album just stood up.",
+        "A golden moment, and he knew exactly where the camera was.",
+        "Sensational pull! That is why they buy the packs.",
+        "The big one arrives last, just as the drama demanded.",
+        "A captain's entrance. Pure sticker-book theatre."
+      ],
+      common: [
+        "Solid squad depth. Every album needs the workers.",
+        "No fireworks, but that is how collections are built.",
+        "A steady pull. Keep the packs moving.",
+        "He does the simple things well.",
+        "Not flashy, but he has done a job there.",
+        "A bread-and-butter sticker, and sometimes that is enough."
+      ],
+      tease: [
+        "The wrapper is open... have we got something here?",
+        "Here comes the next one. The studio has gone very quiet.",
+        "A little pause, a little promise. Let's see the shirt.",
+        "The card back is staring us down now.",
+        "You can hear the album pages rustling.",
+        "One more turn of the wrist...",
+        "This is where collections are made and hearts are tested.",
+        "Hold on. There is a glint on the edge.",
+        "The pack is making us wait for it.",
+        "And now, from the top of the stack..."
+      ]
+    };
+    const REVEAL_DELAY = 2200;
+
+    const state = {
+      cash: 90,
+      packs: 0,
+      prizePacks: 0,
+      page: -1,
+      luck: 0,
+      inventory: [],
+      placed: new Map(),
+      achievements: {},
+      stats: {
+        packsBought: 0,
+        packsOpened: 0,
+        unlocksBought: 0,
+        topStatsPlayed: 0,
+        topStatsWon: 0,
+        triviaWon: 0,
+        perfectPlacements: 0,
+        stickersSold: 0,
+        foilsPulled: 0
+      },
+      stickers: [],
+      revealQueue: [],
+      currentReveal: null,
+      openingPack: false,
+      revealBusy: false,
+      revealTimer: null,
+      trivia: null,
+      triviaStreak: 0,
+      upgrades: {
+        fastReveal: { owned: false, enabled: false },
+        steadyHand: { owned: false, enabled: false },
+        topStats: { owned: false, enabled: true },
+        stickerLift: { owned: false, enabled: true }
+      },
+      topStatsTeams: [],
+      topStatsCategory: "speed",
+      topStatsResult: "Unlock Top Stats to play for free packs.",
+      topStatsMatch: null,
+      sections: { shop: false, topstats: false, trivia: false },
+      placement: null,
+      pendingDestroyId: null,
+      pointer: { active: false, x: 0, y: 0 },
+      placementFrame: 0,
+      resizeTimer: 0
+    };
+
+    const keepy = {
+      x: null,
+      y: null,
+      vx: 0,
+      vy: 0,
+      rotation: 0,
+      spin: 0,
+      score: 0,
+      best: Number(localStorage.getItem(KEEPY_BEST_KEY)) || 0,
+      active: false,
+      lastTime: 0,
+      frame: 0
+    };
+
+    const els = {
+      splash: document.querySelector("#splash"),
+      startGame: document.querySelector("#startGame"),
+      cash: document.querySelector("#cash"),
+      packCount: document.querySelector("#packCount"),
+      progress: document.querySelector("#progress"),
+      luck: document.querySelector("#luck"),
+      packStack: document.querySelector("#packStack"),
+      message: document.querySelector("#message"),
+      keepyWidget: document.querySelector("#keepyWidget"),
+      keepyScore: document.querySelector("#keepyScore"),
+      keepyBest: document.querySelector("#keepyBest"),
+      soccerBall: document.querySelector("#soccerBall"),
+      buyPack: document.querySelector("#buyPack"),
+      openPack: document.querySelector("#openPack"),
+      fastRevealControl: document.querySelector("#fastRevealControl"),
+      steadyHandControl: document.querySelector("#steadyHandControl"),
+      topStatsControl: document.querySelector("#topStatsControl"),
+      stickerLiftControl: document.querySelector("#stickerLiftControl"),
+      topStatsPanel: document.querySelector("#topStatsPanel"),
+      triviaModal: document.querySelector("#triviaModal"),
+      triviaQuestion: document.querySelector("#triviaQuestion"),
+      triviaOptions: document.querySelector("#triviaOptions"),
+      triviaStatus: document.querySelector("#triviaStatus"),
+      albumShell: document.querySelector("#albumShell"),
+      bookSpread: document.querySelector("#bookSpread"),
+      bookPrev: document.querySelector("[data-book-prev]"),
+      bookNext: document.querySelector("[data-book-next]"),
+      opened: document.querySelector("#opened"),
+      revealModal: document.querySelector("#revealModal"),
+      revealTitle: document.querySelector("#revealTitle"),
+      revealCard: document.querySelector("#revealCard"),
+      commentaryLine: document.querySelector("#commentaryLine"),
+      commentarySub: document.querySelector("#commentarySub"),
+      revealNext: document.querySelector("#revealNext"),
+      detailModal: document.querySelector("#detailModal"),
+      detailStage: document.querySelector("#detailStage"),
+      detailSpinCard: document.querySelector("#detailSpinCard"),
+      detailSticker: document.querySelector("#detailSticker"),
+      detailInfo: document.querySelector("#detailInfo"),
+      destroyModal: document.querySelector("#destroyModal"),
+      destroyCopy: document.querySelector("#destroyCopy"),
+      placeModal: document.querySelector("#placeModal"),
+      placeStage: document.querySelector("#placeStage"),
+      placementSticker: document.querySelector("#placementSticker"),
+      placeNow: document.querySelector("#placeNow"),
+      topStatsModal: document.querySelector("#topStatsModal"),
+      topStatsArena: document.querySelector("#topStatsArena"),
+      topStatsForfeit: document.querySelector("#topStatsForfeit"),
+      achievementsModal: document.querySelector("#achievementsModal"),
+      achievementsRoom: document.querySelector("#achievementsRoom"),
+      resultModal: document.querySelector("#resultModal"),
+      resultTarget: document.querySelector("#resultTarget"),
+      resultSticker: document.querySelector("#resultSticker"),
+      resultQuality: document.querySelector("#resultQuality"),
+      resultAccuracy: document.querySelector("#resultAccuracy"),
+      resultCopy: document.querySelector("#resultCopy")
+    };
+
+    function randomItem(items) {
+      return items[Math.floor(Math.random() * items.length)];
+    }
+
+    function saveGame() {
+      const data = {
+        cash: state.cash,
+        packs: state.packs,
+        prizePacks: state.prizePacks,
+        page: state.page,
+        luck: state.luck,
+        inventory: state.inventory,
+        placed: Array.from(state.placed.entries()),
+        achievements: state.achievements,
+        stats: state.stats,
+        triviaStreak: state.triviaStreak,
+        trivia: state.trivia,
+        upgrades: state.upgrades,
+        topStatsTeams: state.topStatsTeams,
+        topStatsCategory: state.topStatsCategory,
+        topStatsResult: state.topStatsResult,
+        topStatsMatch: state.topStatsMatch,
+        sections: state.sections,
+        openingPack: state.openingPack,
+        revealBusy: state.revealBusy,
+        revealQueue: state.revealQueue,
+        currentReveal: state.currentReveal,
+        stickers: state.stickers.map(sticker => ({
+          id: sticker.id,
+          name: sticker.name,
+          number: sticker.number,
+          position: sticker.position,
+          rarity: sticker.rarity,
+          value: sticker.value,
+          stats: sticker.stats
+        }))
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function loadGame() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      try {
+        const data = JSON.parse(raw);
+        if (Array.isArray(data.stickers) && data.stickers.length === state.stickers.length) {
+          data.stickers.forEach(savedSticker => {
+            const sticker = stickerById(savedSticker.id);
+            if (!sticker) return;
+            sticker.name = savedSticker.name;
+            sticker.number = savedSticker.number;
+            sticker.position = savedSticker.position;
+            sticker.rarity = savedSticker.rarity;
+            sticker.value = savedSticker.value;
+            sticker.stats = savedSticker.stats || generatePlayerStats(sticker.position, sticker.rarity, sticker.artIndex, sticker.page);
+          });
+        }
+        state.cash = Number.isFinite(data.cash) ? data.cash : state.cash;
+        state.packs = Number.isFinite(data.packs) ? data.packs : state.packs;
+        state.prizePacks = Number.isFinite(data.prizePacks) ? data.prizePacks : state.prizePacks;
+        state.page = Number.isFinite(data.page) ? data.page : state.page;
+        state.luck = Number.isFinite(data.luck) ? data.luck : state.luck;
+        state.inventory = Array.isArray(data.inventory) ? data.inventory : [];
+        state.achievements = normalizeAchievements(data.achievements);
+        if (data.stats && typeof data.stats === "object") {
+          state.stats = { ...state.stats, ...data.stats };
+        }
+        if (data.openingPack) {
+          state.openingPack = true;
+          state.revealBusy = false;
+          state.currentReveal = null;
+          state.revealQueue = Array.isArray(data.revealQueue) ? data.revealQueue : [];
+          if (data.revealBusy && data.currentReveal) {
+            state.revealQueue.unshift(data.currentReveal);
+          }
+        }
+        state.placed = new Map(Array.isArray(data.placed) ? data.placed : []);
+        state.triviaStreak = Number.isFinite(data.triviaStreak) ? data.triviaStreak : 0;
+        state.trivia = data.trivia && stickerById(data.trivia.stickerId) ? data.trivia : null;
+        if (data.upgrades) {
+          state.upgrades.fastReveal = {
+            owned: Boolean(data.upgrades.fastReveal?.owned),
+            enabled: Boolean(data.upgrades.fastReveal?.enabled && data.upgrades.fastReveal?.owned)
+          };
+          state.upgrades.steadyHand = {
+            owned: Boolean(data.upgrades.steadyHand?.owned),
+            enabled: Boolean(data.upgrades.steadyHand?.enabled && data.upgrades.steadyHand?.owned)
+          };
+          state.upgrades.topStats = {
+            owned: Boolean(data.upgrades.topStats?.owned),
+            enabled: true
+          };
+          state.upgrades.stickerLift = {
+            owned: Boolean(data.upgrades.stickerLift?.owned),
+            enabled: true
+          };
+        }
+        state.topStatsTeams = Array.isArray(data.topStatsTeams) ? data.topStatsTeams.filter(index => Number.isInteger(index)) : [];
+        state.topStatsCategory = TOP_STATS_CATEGORIES.some(category => category.key === data.topStatsCategory) ? data.topStatsCategory : "speed";
+        state.topStatsResult = typeof data.topStatsResult === "string" ? data.topStatsResult : state.topStatsResult;
+        state.topStatsMatch = validTopStatsMatch(data.topStatsMatch) ? data.topStatsMatch : null;
+        if (data.sections) {
+          state.sections = {
+            shop: Boolean(data.sections.shop),
+            topstats: Boolean(data.sections.topstats),
+            trivia: Boolean(data.sections.trivia)
+          };
+        }
+        setMessage(data.openingPack ? "Save loaded. Resume the pack opening from the unopened stack." : "Save loaded. Your album is right where you left it.");
+        return true;
+      } catch {
+        localStorage.removeItem(STORAGE_KEY);
+        return false;
+      }
+    }
+
+    function createStickers() {
+      const usedNames = new Set();
+      TEAMS.forEach((team, teamIndex) => {
+        for (let i = 0; i < PAGE_SIZE; i += 1) {
+          let name = "";
+          do {
+            name = `${randomItem(FIRST_NAMES)} ${randomItem(LAST_NAMES)}`;
+          } while (usedNames.has(name));
+          usedNames.add(name);
+
+          const rarity = i === 0 ? "Star" : i < 4 ? "Rare" : i < 9 ? "Uncommon" : "Common";
+          state.stickers.push({
+            id: `${teamIndex}-${i}`,
+            slot: i + 1,
+            page: teamIndex,
+            team: team.name,
+            colors: team.colors,
+            accent: team.accent,
+            name,
+            number: i + 1,
+            position: POSITIONS[i],
+            rarity,
+            value: RARITIES[rarity].value,
+            stats: generatePlayerStats(POSITIONS[i], rarity, i, teamIndex),
+            sheet: team.sheet || null,
+            artIndex: i
+          });
+        }
+      });
+    }
+
+    function generatePlayerStats(position, rarity, index, teamIndex) {
+      const rarityBonus = { Common: 0, Uncommon: 7, Rare: 15, Star: 25 }[rarity];
+      const n = (index * 17 + teamIndex * 23) % 19;
+      const base = {
+        speed: 48 + n,
+        accuracy: 48 + ((n * 3) % 20),
+        control: 48 + ((n * 5) % 20),
+        defense: 48 + ((n * 7) % 20)
+      };
+
+      if (position === "GK") {
+        base.defense += 18;
+        base.speed -= 7;
+      } else if (position === "DF") {
+        base.defense += 16;
+        base.accuracy -= 2;
+      } else if (position === "MF") {
+        base.control += 15;
+        base.accuracy += 8;
+      } else if (position === "FW") {
+        base.speed += 12;
+        base.accuracy += 16;
+        base.defense -= 5;
+      }
+
+      Object.keys(base).forEach(key => {
+        base[key] = Math.max(35, Math.min(99, Math.round(base[key] + rarityBonus)));
+      });
+      return base;
+    }
+
+    function stickerById(id) {
+      return state.stickers.find(sticker => sticker.id === id);
+    }
+
+    function inventoryCount(id) {
+      return state.inventory.filter(item => item.id === id).length;
+    }
+
+    function unplacedStickers() {
+      return state.stickers.filter(sticker => !state.placed.has(sticker.id));
+    }
+
+    function chooseRarity() {
+      const entries = Object.entries(RARITIES);
+      const total = entries.reduce((sum, [, info]) => sum + info.weight, 0);
+      let roll = Math.random() * total;
+      for (const [rarity, info] of entries) {
+        roll -= info.weight;
+        if (roll <= 0) return rarity;
+      }
+      return "Common";
+    }
+
+    function pullSticker() {
+      const shouldFavorNeed = Math.random() < state.luck / 100;
+      const rarity = chooseRarity();
+      let pool = state.stickers.filter(sticker => sticker.rarity === rarity);
+      let luckAssisted = false;
+      if (shouldFavorNeed) {
+        const needed = pool.filter(sticker => !state.placed.has(sticker.id) && inventoryCount(sticker.id) === 0);
+        if (needed.length) {
+          pool = needed;
+          luckAssisted = true;
+        }
+      }
+      return { sticker: randomItem(pool.length ? pool : state.stickers), luckAssisted };
+    }
+
+    function rollFoil(sticker, prizePack = false) {
+      const rarityNudge = { Common: 0, Uncommon: 0.004, Rare: 0.009, Star: 0.016 }[sticker.rarity] || 0;
+      const chance = (prizePack ? PRIZE_FOIL_CHANCE : FOIL_CHANCE) + rarityNudge;
+      return Math.random() < chance;
+    }
+
+    function startTriviaQuestion() {
+      const sticker = randomItem(state.stickers);
+      state.trivia = {
+        stickerId: sticker.id,
+        answer: sticker.team
+      };
+      renderTrivia();
+    }
+
+    function answerTrivia(teamName) {
+      if (!state.trivia) startTriviaQuestion();
+      const sticker = stickerById(state.trivia.stickerId);
+      const correct = teamName === state.trivia.answer;
+      if (correct) {
+        state.triviaStreak += 1;
+        if (state.triviaStreak >= 3) {
+          state.triviaStreak = 0;
+          state.cash += 1;
+          state.stats.triviaWon += 1;
+          setMessage(`Trivia pays out. ${sticker.name} makes it $1 earned.`);
+          checkAchievements();
+        } else {
+          setMessage(`Correct. ${sticker.name} plays for ${teamName}.`);
+        }
+      } else {
+        state.triviaStreak = 0;
+        setMessage(`Not this time. ${sticker.name} plays for ${state.trivia.answer}.`);
+      }
+      state.trivia = null;
+      startTriviaQuestion();
+      saveGame();
+      render();
+    }
+
+    function renderTrivia() {
+      if (!state.trivia || !state.stickers.length) return;
+      const sticker = stickerById(state.trivia.stickerId);
+      const options = shuffle([
+        sticker.team,
+        ...shuffle(TEAMS.filter(team => team.name !== sticker.team)).slice(0, 3).map(team => team.name)
+      ]);
+      els.triviaQuestion.textContent = `${sticker.name} plays for which team?`;
+      els.triviaOptions.innerHTML = options.map(teamName => `
+        <button type="button" data-trivia-team="${teamName}">${teamName}</button>
+      `).join("");
+      const needed = 3 - state.triviaStreak;
+      els.triviaStatus.textContent = `${state.triviaStreak}/3 correct. ${needed} more for $1.`;
+    }
+
+    function openTriviaModal() {
+      if (!state.trivia) startTriviaQuestion();
+      renderTrivia();
+      els.triviaModal.classList.add("visible");
+    }
+
+    function closeTriviaModal() {
+      els.triviaModal.classList.remove("visible");
+    }
+
+    function buyUpgrade(key) {
+      const upgrade = state.upgrades[key];
+      if (!upgrade || upgrade.owned) return;
+      const cost = upgradeCost(key);
+      if (state.cash < cost) {
+        setMessage(`You need $${cost} for that unlock.`);
+        return;
+      }
+      state.cash -= cost;
+      upgrade.owned = true;
+      upgrade.enabled = true;
+      state.stats.unlocksBought += 1;
+      setMessage(`${upgradeName(key)} unlocked and switched on.`);
+      checkAchievements();
+      saveGame();
+      render();
+    }
+
+    function toggleUpgrade(key, enabled) {
+      const upgrade = state.upgrades[key];
+      if (!upgrade?.owned) return;
+      upgrade.enabled = enabled;
+      setMessage(`${upgradeName(key)} ${enabled ? "enabled" : "disabled"}.`);
+      saveGame();
+      render();
+    }
+
+    function upgradeName(key) {
+      if (key === "fastReveal") return "Fast Reveal";
+      if (key === "steadyHand") return "Steady Hand";
+      if (key === "stickerLift") return "Sticker Lift";
+      return "Top Stats";
+    }
+
+    function upgradeCost(key) {
+      return key === "topStats" ? TOP_STATS_UNLOCK_COST : UPGRADE_COST;
+    }
+
+    function buyPack() {
+      if (state.cash < PACK_PRICE) {
+        setMessage("Not enough cash. Selling a sticker can keep the chase alive.");
+        return;
+      }
+      state.cash -= PACK_PRICE;
+      state.packs += 1;
+      state.stats.packsBought += 1;
+      setMessage("A fresh pack joins the stack.");
+      checkAchievements();
+      saveGame();
+      render();
+    }
+
+    function openPack() {
+      if (state.openingPack) {
+        resumeRevealModal();
+        return;
+      }
+      if (state.packs + state.prizePacks < 1) {
+        setMessage("No unopened packs yet.");
+        return;
+      }
+      const prizePack = state.prizePacks > 0;
+      if (prizePack) {
+        state.prizePacks -= 1;
+      } else {
+        state.packs -= 1;
+      }
+      state.stats.packsOpened += 1;
+      const pulled = [];
+      for (let i = 0; i < PACK_SIZE; i += 1) {
+        const pull = pullSticker();
+        const sticker = pull.sticker;
+        const foil = rollFoil(sticker, prizePack);
+        if (foil) state.stats.foilsPulled += 1;
+        pulled.push({
+          id: sticker.id,
+          uid: `${Date.now()}-${Math.random()}-${i}`,
+          foil,
+          prizePack,
+          luckAssisted: pull.luckAssisted,
+          originalIndex: i
+        });
+      }
+      pulled.sort((a, b) => {
+        const rarityDiff = RARITY_RANK[stickerById(a.id).rarity] - RARITY_RANK[stickerById(b.id).rarity];
+        const foilDiff = Number(Boolean(a.foil)) - Number(Boolean(b.foil));
+        return rarityDiff || foilDiff || a.originalIndex - b.originalIndex;
+      });
+      state.revealQueue = pulled;
+      state.currentReveal = null;
+      state.openingPack = true;
+      state.revealBusy = false;
+      els.revealTitle.textContent = "Pack Opening";
+      els.revealCard.classList.remove("revealed", "teasing");
+      els.revealCard.innerHTML = `<div class="reveal-backer" aria-label="Unopened sticker card"></div>`;
+      els.commentaryLine.textContent = "The pack is on the table.";
+      els.commentarySub.textContent = prizePack ? "Top Stats prize pack. Big foil odds." : "Foils can flash in any pack. Rarest sticker reveals last.";
+      els.revealNext.textContent = "Rip Pack";
+      els.revealModal.classList.add("visible");
+      setMessage(prizePack ? "Prize pack opened. Foil chances are boosted hard." : "Pack opened. Watch for a foil flash.");
+      checkAchievements();
+      saveGame();
+      render();
+    }
+
+    function resumeRevealModal() {
+      if (!state.openingPack) return;
+      els.revealTitle.textContent = "Pack Opening";
+      els.revealCard.classList.remove("revealed", "teasing");
+      els.revealCard.innerHTML = `<div class="reveal-backer" aria-label="Unopened sticker card"></div>`;
+      els.commentaryLine.textContent = "Back to the pack.";
+      els.commentarySub.textContent = `${state.revealQueue.length} sticker${state.revealQueue.length === 1 ? "" : "s"} still hidden.`;
+      els.revealNext.disabled = false;
+      els.revealNext.textContent = state.revealQueue.length ? "Resume Opening" : "Finish Pack";
+      els.revealModal.classList.add("visible");
+      setMessage("Pack opening resumed.");
+    }
+
+    function revealNextSticker() {
+      if (!state.openingPack || state.revealBusy) return;
+      if (!state.revealQueue.length) {
+        closeRevealModal();
+        setMessage("Pack complete. The loose stickers are ready.");
+        render();
+        return;
+      }
+
+      const item = state.revealQueue.shift();
+      const sticker = stickerById(item.id);
+      const needed = !state.placed.has(sticker.id) && inventoryCount(sticker.id) === 0;
+      state.currentReveal = item;
+      const revealed = PACK_SIZE - state.revealQueue.length;
+      state.revealBusy = true;
+      els.revealTitle.textContent = `Sticker ${revealed} of ${PACK_SIZE}`;
+      els.revealCard.classList.remove("revealed");
+      els.revealCard.classList.add("teasing");
+      els.revealCard.innerHTML = `<div class="reveal-backer" aria-label="Unopened sticker card"></div>`;
+      els.commentaryLine.textContent = randomItem(COMMENTARY.tease);
+      els.commentarySub.textContent = `${PACK_SIZE - revealed + 1} sticker${PACK_SIZE - revealed + 1 === 1 ? "" : "s"} still hidden in the pack.`;
+      els.revealNext.disabled = true;
+      els.revealNext.textContent = "Revealing...";
+      setMessage("The next sticker is turning over...");
+
+      state.revealTimer = window.setTimeout(() => {
+        const commentary = commentaryFor(sticker, needed, item.luckAssisted);
+        state.inventory.push(item);
+        state.currentReveal = item;
+        state.revealBusy = false;
+        state.revealTimer = null;
+        els.revealCard.classList.remove("teasing", "revealed");
+        els.revealNext.disabled = false;
+        els.revealNext.textContent = state.revealQueue.length ? "Next Sticker" : "Finish Pack";
+        els.commentaryLine.textContent = commentary.line;
+        els.commentarySub.textContent = commentary.sub;
+        els.revealCard.innerHTML = stickerHTML(sticker, Boolean(item.foil));
+        void els.revealCard.offsetWidth;
+        els.revealCard.classList.add("revealed");
+        setMessage(commentary.line);
+        saveGame();
+        render();
+      }, revealDelay());
+    }
+
+    function revealDelay() {
+      return state.upgrades.fastReveal.enabled ? 350 : REVEAL_DELAY;
+    }
+
+    function commentaryFor(sticker, needed, luckAssisted = false) {
+      const pool = sticker.rarity === "Star"
+        ? COMMENTARY.star
+        : sticker.rarity === "Rare"
+          ? COMMENTARY.rare
+          : needed
+            ? COMMENTARY.needed
+            : COMMENTARY.duplicate;
+      const fallback = sticker.rarity === "Common" ? COMMENTARY.common : COMMENTARY.needed;
+      const line = randomItem(pool.length ? pool : fallback);
+      const foilText = state.currentReveal?.foil ? " Foil version!" : "";
+      const sub = luckAssisted
+        ? `Luck nudged this pull. ${sticker.name}, ${sticker.position} for ${sticker.team}. Needed for page ${sticker.page + 1}.`
+        : needed
+        ? `${sticker.name}, ${sticker.position} for ${sticker.team}. Needed for page ${sticker.page + 1}.`
+        : `${sticker.name}, ${sticker.position} for ${sticker.team}. Duplicate, sells for $${sticker.value}.`;
+      return { line: state.currentReveal?.foil ? `Foil flash! ${line}` : luckAssisted ? `Lucky break! ${line}` : line, sub: `${sub}${foilText}` };
+    }
+
+    function closeRevealModal() {
+      if (state.revealTimer) {
+        window.clearTimeout(state.revealTimer);
+        state.revealTimer = null;
+      }
+      if (state.currentReveal && state.revealBusy) {
+        state.revealQueue.unshift(state.currentReveal);
+        setMessage("Pack opening paused. Resume it from the unopened stack.");
+      } else if (state.openingPack && state.revealQueue.length) {
+        setMessage("Pack opening paused. Resume it from the unopened stack.");
+      } else if (state.openingPack) {
+        state.openingPack = false;
+        setMessage("Pack complete. The loose stickers are ready.");
+      }
+      state.currentReveal = null;
+      state.revealBusy = false;
+      els.revealNext.disabled = false;
+      els.revealModal.classList.remove("visible");
+      saveGame();
+      render();
+    }
+
+    function sellInventory(uid) {
+      const index = state.inventory.findIndex(item => item.uid === uid);
+      if (index < 0) return;
+      const item = state.inventory[index];
+      const sticker = stickerById(item.id);
+      state.inventory.splice(index, 1);
+      const value = sellValue(sticker, item);
+      state.cash += value;
+      state.stats.stickersSold += 1;
+      setMessage(`Sold ${item.foil ? "foil " : ""}${sticker.name} for $${value}.`);
+      checkAchievements();
+      saveGame();
+      render();
+    }
+
+    function sellValue(sticker, item = {}) {
+      return sticker.value * (item.foil ? 3 : 1);
+    }
+
+    function stickerStatValue(sticker, categoryKey) {
+      if (!sticker) return null;
+      if (categoryKey === "placement") {
+        const placement = state.placed.get(sticker.id);
+        return Number.isFinite(placement?.accuracy) ? placement.accuracy : null;
+      }
+      return Number.isFinite(sticker.stats?.[categoryKey]) ? sticker.stats[categoryKey] : 50;
+    }
+
+    function stickerStatDisplay(sticker, categoryKey) {
+      const value = stickerStatValue(sticker, categoryKey);
+      return value === null ? "" : value;
+    }
+
+    function isStickerLockedByTopStats(id) {
+      const sticker = stickerById(id);
+      const match = state.topStatsMatch;
+      return Boolean(sticker && match && match.playerTeams?.includes(sticker.page));
+    }
+
+    function liftPlacedSticker(id) {
+      if (!state.upgrades.stickerLift.owned || !state.placed.has(id)) return;
+      const sticker = stickerById(id);
+      if (isStickerLockedByTopStats(id)) {
+        setMessage(`${sticker.name} is locked while ${sticker.team} is in your unfinished Top Stats match.`);
+        closeDestroyModal();
+        return;
+      }
+      state.placed.delete(id);
+      const looseCopies = inventoryCount(id);
+      closeDetails();
+      closeDestroyModal();
+      setMessage(`${sticker.name} was lifted from the album and destroyed.${looseCopies ? " Your loose copy can be placed now." : ""}`);
+      saveGame();
+      render();
+    }
+
+    function requestDestroySticker(id) {
+      if (!state.upgrades.stickerLift.owned || !state.placed.has(id)) return;
+      const sticker = stickerById(id);
+      if (isStickerLockedByTopStats(id)) {
+        setMessage(`${sticker.name} is locked while ${sticker.team} is in your unfinished Top Stats match.`);
+        return;
+      }
+      state.pendingDestroyId = id;
+      els.destroyCopy.textContent = `Destroy ${sticker.name} from the album? This cannot be undone, and the sticker will not return to your loose stack.`;
+      els.destroyModal.classList.add("visible");
+    }
+
+    function confirmDestroySticker() {
+      if (!state.pendingDestroyId) return;
+      const id = state.pendingDestroyId;
+      state.pendingDestroyId = null;
+      liftPlacedSticker(id);
+    }
+
+    function closeDestroyModal() {
+      state.pendingDestroyId = null;
+      els.destroyModal.classList.remove("visible");
+    }
+
+    function startPlacement(uid) {
+      const item = state.inventory.find(entry => entry.uid === uid);
+      if (!item) return;
+      const sticker = stickerById(item.id);
+      if (state.placed.has(sticker.id)) {
+        setMessage("That album spot is already filled. This one is a duplicate.");
+        return;
+      }
+      beginPlacement(item, sticker, false);
+    }
+
+    function startReplacement(uid) {
+      const item = state.inventory.find(entry => entry.uid === uid);
+      if (!item) return;
+      const sticker = stickerById(item.id);
+      if (!state.placed.has(sticker.id)) {
+        startPlacement(uid);
+        return;
+      }
+      closeDetails();
+      setMessage(`Replacing ${sticker.name}. The old sticker will be destroyed if this one goes down.`);
+      beginPlacement(item, sticker, true);
+    }
+
+    function beginPlacement(item, sticker, replacing = false) {
+      state.pointer = { active: false, x: 0, y: 0 };
+      state.placement = {
+        uid: item.uid,
+        sticker,
+        foil: Boolean(item.foil),
+        replacing,
+        start: performance.now(),
+        seed: Math.random() * 1000,
+        dx: 0,
+        dy: 0,
+        rot: 0
+      };
+      els.placementSticker.innerHTML = stickerHTML(sticker, Boolean(item.foil));
+      els.placeModal.classList.add("visible");
+      animatePlacement();
+    }
+
+    function animatePlacement(now = performance.now()) {
+      if (!state.placement) return;
+      const t = (now - state.placement.start) / 1000;
+      const seed = state.placement.seed;
+      const drift = state.upgrades.steadyHand.enabled ? 0.25 : 1;
+      const autoX = (Math.sin(t * 2.1 + seed) * 26 + Math.sin(t * 4.1 + seed * 0.31) * 7) * drift;
+      const autoY = (Math.cos(t * 1.7 + seed * 0.7) * 18 + Math.sin(t * 3.4 + seed) * 5) * drift;
+      const autoRot = (Math.sin(t * 2.6 + seed * 0.5) * 7 + Math.cos(t * 4.6 + seed) * 2) * drift;
+      const assistX = state.pointer.active ? -state.pointer.x * 0.72 : 0;
+      const assistY = state.pointer.active ? -state.pointer.y * 0.72 : 0;
+      state.placement.dx = autoX + assistX;
+      state.placement.dy = autoY + assistY;
+      state.placement.rot = autoRot + (state.pointer.active ? -state.pointer.x * 0.055 : 0);
+      els.placementSticker.style.setProperty("--dx", `${state.placement.dx}px`);
+      els.placementSticker.style.setProperty("--dy", `${state.placement.dy}px`);
+      els.placementSticker.style.setProperty("--rot", `${state.placement.rot}deg`);
+      state.placementFrame = requestAnimationFrame(animatePlacement);
+    }
+
+    function updatePlacementPointer(event) {
+      if (!state.placement) return;
+      const rect = els.placeStage.getBoundingClientRect();
+      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+      const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+      state.pointer = {
+        active: true,
+        x: clientX - rect.left - rect.width / 2,
+        y: clientY - rect.top - rect.height / 2
+      };
+    }
+
+    function clearPlacementPointer() {
+      state.pointer.active = false;
+    }
+
+    function finishPlacement() {
+      if (!state.placement) return;
+      const { uid, sticker, foil, replacing } = state.placement;
+      const score = placementScore();
+      const { dx, dy, rot, accuracy } = score;
+      const quality = placementQuality(accuracy);
+      const boostDelta = placementBoostDelta(accuracy);
+      state.luck = Math.max(0, Math.min(20, state.luck + boostDelta));
+      state.placed.set(sticker.id, {
+        accuracy,
+        quality,
+        dx,
+        dy,
+        rot,
+        foil
+      });
+      state.page = sticker.page;
+      state.inventory = state.inventory.filter(item => item.uid !== uid);
+      closePlaceModal();
+      setMessage(`${quality} placement: ${accuracy}% aligned. ${sticker.name} is now ${replacing ? "replaced" : "stuck"} in the book. Need Boost ${formatBoostDelta(boostDelta)}%.`);
+      showPlacementResult({ sticker, foil, accuracy, quality, boostDelta, dx, dy, rot });
+      if (accuracy === 100) state.stats.perfectPlacements += 1;
+      checkAchievements();
+      saveGame();
+      render();
+      if (state.placed.size === TOTAL_PAGES * PAGE_SIZE) {
+        setMessage("Album complete. You filled every last spot.");
+      }
+    }
+
+    function placementScore() {
+      const targetRect = document.querySelector(".target-slot").getBoundingClientRect();
+      const stickerRect = els.placementSticker.getBoundingClientRect();
+      const targetX = targetRect.left + targetRect.width / 2;
+      const targetY = targetRect.top + targetRect.height / 2;
+      const stickerX = stickerRect.left + stickerRect.width / 2;
+      const stickerY = stickerRect.top + stickerRect.height / 2;
+      const dx = stickerX - targetX;
+      const dy = stickerY - targetY;
+      const rot = state.placement.rot;
+      const distance = Math.sqrt(dx * dx + dy * dy) + Math.abs(rot) * 1.5;
+      return {
+        dx,
+        dy,
+        rot,
+        accuracy: Math.max(0, Math.min(100, Math.round(100 - distance)))
+      };
+    }
+
+    function showPlacementResult(result) {
+      const previewScale = 158 / 178;
+      const previewDx = Math.max(-26, Math.min(26, result.dx * previewScale));
+      const previewDy = Math.max(-20, Math.min(20, result.dy * previewScale));
+      const placedX = `${previewDx}px`;
+      const placedY = `${previewDy}px`;
+      const placedRot = `${Math.max(-18, Math.min(18, result.rot))}deg`;
+      els.resultSticker.style.setProperty("--result-x", placedX);
+      els.resultSticker.style.setProperty("--result-y", placedY);
+      els.resultSticker.style.setProperty("--result-rot", placedRot);
+      updateMissBands(previewDx, previewDy);
+      els.resultSticker.innerHTML = stickerHTML(result.sticker, Boolean(result.foil));
+      els.resultQuality.textContent = result.quality;
+      els.resultAccuracy.textContent = `${result.accuracy}%`;
+      els.resultCopy.textContent = `${result.sticker.name} landed ${result.quality.toLowerCase()}. Need Boost ${formatBoostDelta(result.boostDelta)}% for future packs. The book keeps the same crookedness.`;
+      els.resultModal.classList.add("visible");
+    }
+
+    function updateMissBands(dx, dy) {
+      const missTop = Math.max(0, dy);
+      const missBottom = Math.max(0, -dy);
+      const missLeft = Math.max(0, dx);
+      const missRight = Math.max(0, -dx);
+      els.resultTarget.style.setProperty("--miss-top", `${missTop}px`);
+      els.resultTarget.style.setProperty("--miss-right", `${missRight}px`);
+      els.resultTarget.style.setProperty("--miss-bottom", `${missBottom}px`);
+      els.resultTarget.style.setProperty("--miss-left", `${missLeft}px`);
+    }
+
+    function placementQuality(accuracy) {
+      if (accuracy > 86) return "Perfect";
+      if (accuracy > 68) return "Clean";
+      if (accuracy > 48) return "Crooked";
+      return "Terrible";
+    }
+
+    function placementBoostDelta(accuracy) {
+      if (accuracy > 86) return 2;
+      if (accuracy > 68) return 1;
+      if (accuracy > 48) return -1;
+      return -2;
+    }
+
+    function formatBoostDelta(delta) {
+      return delta > 0 ? `+${delta}` : `${delta}`;
+    }
+
+    function closePlaceModal() {
+      if (state.placementFrame) cancelAnimationFrame(state.placementFrame);
+      state.placementFrame = 0;
+      state.placement = null;
+      clearPlacementPointer();
+      els.placeModal.classList.remove("visible");
+    }
+
+    function setMessage(text) {
+      els.message.textContent = text;
+    }
+
+    function stickerStyle(sticker) {
+      const base = `--sticker-bg: linear-gradient(135deg, ${sticker.colors[0]}, ${sticker.colors[1]} 58%, ${sticker.accent});`;
+      if (!sticker.sheet) return base;
+      const col = sticker.artIndex % 5;
+      const row = Math.floor(sticker.artIndex / 5);
+      const sheetWidth = 1402;
+      const sheetHeight = 1122;
+      const cropWidth = 248;
+      const cropHeight = 248;
+      const cropX = 27 + col * 275;
+      const cropY = 30 + row * 275;
+      const sizeX = `${(sheetWidth / cropWidth) * 100}%`;
+      const sizeY = `${(sheetHeight / cropHeight) * 100}%`;
+      const x = `${(cropX / (sheetWidth - cropWidth)) * 100}%`;
+      const y = `${(cropY / (sheetHeight - cropHeight)) * 100}%`;
+      return `${base} --portrait-sheet: url(${sticker.sheet}); --portrait-size-x: ${sizeX}; --portrait-size-y: ${sizeY}; --portrait-x: ${x}; --portrait-y: ${y};`;
+    }
+
+    function stickerHTML(sticker, foil = false, options = {}) {
+      const valueBadge = options.value ? `<span class="card-value-badge">$${options.value}</span>` : "";
+      const actionIcon = options.action
+        ? `<button class="card-action-icon ${options.action.type}" type="button" ${options.action.attr} aria-label="${options.action.label}" title="${options.action.label}">${options.action.icon}</button>`
+        : "";
+      return `
+        <div class="sticker ${sticker.sheet ? "has-art" : ""} ${foil ? "foil" : ""} ${options.action ? "has-card-action" : ""} rarity-card-${sticker.rarity}" style="${stickerStyle(sticker)}" data-sticker-id="${sticker.id}">
+          ${sticker.sheet ? "<span class=\"portrait\" aria-hidden=\"true\"></span>" : ""}
+          <span class="rarity rarity-${sticker.rarity}" title="${sticker.rarity}" aria-label="${sticker.rarity} rarity"></span>
+          ${valueBadge}
+          ${foil ? "<span class=\"foil-holo\" aria-hidden=\"true\"></span>" : ""}
+          <span class="sticker-name">#${sticker.number} ${sticker.name}</span>
+          <span class="sticker-meta">${sticker.position} - ${sticker.team}</span>
+          <span class="card-stat-panel" aria-label="Player stats">
+            ${cardStatsHTML(sticker)}
+          </span>
+          ${actionIcon}
+        </div>
+      `;
+    }
+
+    function cardStatsHTML(sticker) {
+      return TOP_STATS_CATEGORIES.map(category => `
+        <span class="card-stat">
+          <span>${category.label.split(" ")[0]}</span>
+          <strong>${stickerStatDisplay(sticker, category.key)}</strong>
+        </span>
+      `).join("");
+    }
+
+    function trashIconHTML() {
+      return `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h16"></path>
+          <path d="M9 7V5h6v2"></path>
+          <path d="M7 7l1 13h8l1-13"></path>
+          <path d="M10 11v5"></path>
+          <path d="M14 11v5"></path>
+        </svg>
+      `;
+    }
+
+    function replaceIconHTML() {
+      return `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 7h11l-3-3"></path>
+          <path d="M18 7l-3 3"></path>
+          <path d="M17 17H6l3 3"></path>
+          <path d="M6 17l3-3"></path>
+        </svg>
+      `;
+    }
+
+    function hexToRgba(hex, alpha = 1) {
+      const clean = String(hex || "#061a3b").replace("#", "");
+      const value = clean.length === 3
+        ? clean.split("").map(char => char + char).join("")
+        : clean.padEnd(6, "0").slice(0, 6);
+      const int = parseInt(value, 16);
+      if (Number.isNaN(int)) return `rgba(6, 26, 59, ${alpha})`;
+      const r = (int >> 16) & 255;
+      const g = (int >> 8) & 255;
+      const b = int & 255;
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    function teamInitials(name) {
+      return name
+        .replace(/\b(FC|SC|AFC|CF|United|City|Rovers|Athletic|Wanderers)\b/gi, "")
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .map(part => part[0])
+        .join("")
+        .toUpperCase() || name.slice(0, 2).toUpperCase();
+    }
+
+    function teamLogoHTML(team, index) {
+      const name = team.name.toLowerCase();
+      const initials = teamInitials(team.name);
+      const motif = name.includes("harbor")
+        ? `<path d="M50 30v52"></path><path d="M32 50h36"></path><path d="M36 72c9 8 19 8 28 0"></path>`
+        : name.includes("crown")
+          ? `<path d="M28 72h44"></path><path d="M32 68l8-30 15 18 17-22 8 34"></path><path d="M38 42h.1M55 32h.1M72 38h.1"></path>`
+          : name.includes("dragon")
+            ? `<path d="M33 70c8-24 31-30 42-15-13-3-19 4-18 16"></path><path d="M42 54l-8-16 17 8"></path><path d="M61 43l10-12-1 17"></path>`
+            : name.includes("falcon")
+              ? `<path d="M22 58c22-24 42-25 58-14-17 3-29 12-38 30"></path><path d="M34 58c11 0 22 4 31 14"></path>`
+              : name.includes("eclipse")
+                ? `<circle cx="50" cy="50" r="24"></circle><path d="M63 26a28 28 0 1 0 0 48 22 22 0 1 1 0-48z"></path>`
+                : name.includes("cyclone")
+                  ? `<path d="M24 52c12-22 45-25 56-4"></path><path d="M75 49c-9 26-45 27-55 5"></path><path d="M38 50c6-9 19-10 26-2"></path>`
+                  : name.includes("blaze") || name.includes("inferno")
+                    ? `<path d="M50 80c-14-8-18-21-9-34 8-11 6-18 3-25 17 11 31 33 17 52"></path><path d="M52 76c7-8 8-18 1-29-2 10-14 13-10 25"></path>`
+                    : name.includes("jaguar")
+                      ? `<path d="M29 64c9-22 32-31 48-16-13 0-17 9-15 21"></path><path d="M37 47l-10-10 18 2"></path><path d="M54 44h.1M64 48h.1M47 55h.1"></path>`
+                      : name.includes("guardian")
+                        ? `<path d="M50 18l28 12v19c0 17-10 28-28 35-18-7-28-18-28-35V30z"></path><path d="M50 28v42"></path><path d="M36 48h28"></path>`
+                        : name.includes("horizon") || name.includes("aurora")
+                          ? `<path d="M20 62h60"></path><path d="M30 62c4-18 15-28 20-36 5 8 16 18 20 36"></path><path d="M28 44c15-10 29-10 44 0"></path>`
+                          : `<path d="M50 18l28 16v32L50 82 22 66V34z"></path><path d="M34 38h32"></path><path d="M34 62h32"></path>`;
+      return `
+        <div class="team-watermark" aria-hidden="true">
+          <svg viewBox="0 0 100 100" role="img">
+            <path d="M50 8l34 16v38c0 15-12 25-34 34-22-9-34-19-34-34V24z" stroke-width="4"></path>
+            ${motif}
+            <text x="50" y="90" text-anchor="middle" font-size="${initials.length > 1 ? 15 : 18}" font-weight="900" fill="currentColor" stroke="none">${initials}</text>
+          </svg>
+        </div>
+      `;
+    }
+
+    function renderAlbum() {
+      state.page = Math.max(-1, Math.min(TEAMS.length, state.page));
+      const isFront = state.page < 0;
+      const isBack = state.page >= TEAMS.length;
+      const leftPage = isFront || isBack ? state.page : Math.max(0, Math.min(TEAMS.length - 1, state.page - (state.page % 2)));
+      const rightPage = Math.min(TEAMS.length - 1, leftPage + 1);
+      els.bookPrev.disabled = isFront;
+      els.bookNext.disabled = isBack;
+      els.albumShell.className = `album-shell ${isFront || isBack ? "single-page-shell" : ""}`;
+      els.bookSpread.className = `album-spread ${isFront || isBack ? "single-page" : ""}`;
+
+      if (isFront) {
+        els.bookSpread.innerHTML = coverPageHTML("front");
+        return;
+      }
+
+      if (isBack) {
+        els.bookSpread.innerHTML = coverPageHTML("back");
+        return;
+      }
+
+      els.bookSpread.innerHTML = [
+        albumBookPageHTML(TEAMS[leftPage], leftPage, "left-page"),
+        rightPage !== leftPage ? albumBookPageHTML(TEAMS[rightPage], rightPage, "right-page") : ""
+      ].join("");
+    }
+
+    function pagePlacedCount(pageIndex) {
+      return state.stickers.filter(sticker => sticker.page === pageIndex && state.placed.has(sticker.id)).length;
+    }
+
+    function coverPageHTML(side) {
+      const placed = state.placed.size;
+      const total = TOTAL_PAGES * PAGE_SIZE;
+      const isBack = side === "back";
+      return `
+        <article class="book-cover ${isBack ? "back-cover" : "front-cover"}" data-page-label="${isBack ? "Back Cover" : "Front Cover"}">
+          <div class="cover-copy">
+            <h2>${isBack ? "Full Time" : "Full Album FC"}</h2>
+            <p>${isBack ? `${placed}/${total} stickers placed` : "Sticker Collection"}</p>
+          </div>
+        </article>
+      `;
+    }
+
+    function albumBookPageHTML(team, pageIndex, pageSide) {
+      const pageStickers = state.stickers.filter(sticker => sticker.page === pageIndex);
+      const placed = pagePlacedCount(pageIndex);
+      return `
+        <article class="book-page ${pageSide}" data-book-page="${pageIndex}" data-page-label="Page ${pageIndex + 1}" style="--team-mark:${hexToRgba(team.colors[0], 0.34)};">
+          ${teamLogoHTML(team, pageIndex)}
+          <div class="book-page-head">
+            <h3>${pageIndex + 1}. ${team.name}</h3>
+            <span class="label">${placed}/20 placed</span>
+          </div>
+          <div class="album-page">
+            ${pageStickers.map(sticker => albumSlotHTML(sticker)).join("")}
+          </div>
+        </article>
+      `;
+    }
+
+    function albumSlotHTML(sticker) {
+        if (state.placed.has(sticker.id)) {
+          const placement = state.placed.get(sticker.id);
+          const placedX = `${Math.max(-18, Math.min(18, placement.dx * 0.22))}px`;
+          const placedY = `${Math.max(-14, Math.min(14, placement.dy * 0.22))}px`;
+          const placedRot = `${Math.max(-13, Math.min(13, placement.rot * 0.85))}deg`;
+          return `
+            <div class="slot filled" role="button" tabindex="0" data-sticker-id="${sticker.id}">
+              <div class="album-sticker-wrap" style="--placed-x:${placedX}; --placed-y:${placedY}; --placed-rot:${placedRot};">
+                ${stickerHTML(sticker, Boolean(placement.foil))}
+              </div>
+              <div class="slot-caption">
+                <strong>${sticker.name}</strong>
+                <span>#${sticker.number} ${sticker.position}${placement.foil ? " - Foil" : ""}</span>
+              </div>
+            </div>
+          `;
+        }
+        return `
+          <div class="slot" data-empty-id="${sticker.id}">
+            <span class="slot-number">${sticker.slot}</span>
+            <span>${sticker.position}<br><span class="rarity rarity-${sticker.rarity}" title="${sticker.rarity}" aria-label="${sticker.rarity} rarity"></span></span>
+          </div>
+        `;
+    }
+
+    function goToAlbumPage(pageIndex) {
+      state.page = Math.max(0, Math.min(TEAMS.length - 1, pageIndex));
+      saveGame();
+      render();
+    }
+
+    function turnSpread(direction) {
+      const current = Math.max(-1, Math.min(TEAMS.length, state.page));
+      if (direction > 0) {
+        if (current < 0) state.page = 0;
+        else if (current >= TEAMS.length - 2) state.page = TEAMS.length;
+        else state.page = current - (current % 2) + 2;
+      } else {
+        if (current >= TEAMS.length) state.page = Math.max(0, TEAMS.length - 2);
+        else if (current <= 0) state.page = -1;
+        else state.page = Math.max(0, current - (current % 2) - 2);
+      }
+      saveGame();
+      render();
+    }
+
+    function renderPacks() {
+      const totalPacks = state.packs + state.prizePacks;
+      const visible = Math.min(totalPacks, 7);
+      els.packStack.innerHTML = Array.from({ length: visible }, (_, index) => {
+        const turn = (index % 2 ? 5 : -5) + index;
+        const shift = `${(index - visible / 2) * 3}px`;
+        const prize = index < state.prizePacks;
+        return `<div class="pack ${prize ? "prize-pack" : ""}" title="${prize ? "Prize pack: big foil odds" : "Pack: foil chance"}" style="--index:${index}; --turn:${turn}deg; --shift:${shift};"></div>`;
+      }).join("");
+    }
+
+    function renderOpened() {
+      if (!state.inventory.length) {
+        els.opened.innerHTML = `<p class="empty-note">Buy and open a pack to reveal five stickers.</p>`;
+        return;
+      }
+      els.opened.innerHTML = `
+        <div class="opened-grid">
+          ${state.inventory.map(item => {
+            const sticker = stickerById(item.id);
+            const placed = state.placed.has(sticker.id);
+            return `
+              <div class="pull ${item.foil ? "foil-pull" : ""}" data-pull-uid="${item.uid}">
+                ${stickerHTML(sticker, Boolean(item.foil))}
+                <div class="pull-actions">
+                  <div class="pull-title">
+                    <span class="pull-name">${item.foil ? "Foil " : ""}${sticker.name}</span>
+                    <span class="pull-meta">#${sticker.number} ${sticker.position} - ${sticker.team}</span>
+                    <strong>${placed ? "Duplicate" : "Needed"} - sells for $${sellValue(sticker, item)}</strong>
+                  </div>
+                  <button type="button" data-detail-id="${sticker.id}" data-detail-uid="${item.uid}">Details</button>
+                  <button class="primary" type="button" data-place-uid="${item.uid}" ${placed ? "disabled" : ""}>Place</button>
+                  <button class="danger" type="button" data-sell-uid="${item.uid}">Sell</button>
+                </div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    function renderStats() {
+      els.cash.textContent = `$${state.cash}`;
+      els.packCount.textContent = state.prizePacks ? `${state.packs + state.prizePacks} (${state.prizePacks} prize)` : state.packs;
+      els.progress.textContent = `${state.placed.size}/${TOTAL_PAGES * PAGE_SIZE}`;
+      els.luck.textContent = `${Math.round(state.luck)}%`;
+      els.buyPack.disabled = state.cash < PACK_PRICE || state.openingPack;
+      els.openPack.disabled = state.packs + state.prizePacks < 1 && !state.openingPack;
+      els.openPack.textContent = state.openingPack ? "Resume Opening Pack" : "Open Pack";
+    }
+
+    function renderUpgrades() {
+      renderUpgradeControl("fastReveal", els.fastRevealControl);
+      renderUpgradeControl("steadyHand", els.steadyHandControl);
+      renderUpgradeControl("topStats", els.topStatsControl);
+      renderUpgradeControl("stickerLift", els.stickerLiftControl);
+    }
+
+    function renderUpgradeControl(key, target) {
+      const upgrade = state.upgrades[key];
+      if (!upgrade.owned) {
+        const cost = upgradeCost(key);
+        target.innerHTML = `<button type="button" data-buy-upgrade="${key}" ${state.cash < cost ? "disabled" : ""}>$${cost}</button>`;
+        return;
+      }
+      if (key === "topStats" || key === "stickerLift") {
+        target.innerHTML = `<span class="label">Unlocked</span>`;
+        return;
+      }
+      target.innerHTML = `
+        <label class="toggle">
+          <input type="checkbox" data-toggle-upgrade="${key}" ${upgrade.enabled ? "checked" : ""}>
+          On
+        </label>
+      `;
+    }
+
+    function completedTeamIndexes() {
+      return TEAMS
+        .map((team, index) => ({ index, complete: state.stickers.filter(sticker => sticker.page === index).every(sticker => state.placed.has(sticker.id)) }))
+        .filter(team => team.complete)
+        .map(team => team.index);
+    }
+
+    function renderTopStats() {
+      if (!state.upgrades.topStats.owned) {
+        els.topStatsPanel.innerHTML = `
+          <button class="section-toggle" type="button" data-toggle-section="topstats"><span class="section-title">Top Stats</span></button>
+          <div class="section-body">
+            <p class="empty-note">Unlock for $${TOP_STATS_UNLOCK_COST}. Play costs $${TOP_STATS_COST}; win 2 boosted foil-chance prize packs.</p>
+          </div>
+        `;
+        return;
+      }
+
+      if (state.topStatsMatch) {
+        els.topStatsPanel.innerHTML = `
+          <button class="section-toggle" type="button" data-toggle-section="topstats"><span class="section-title">Top Stats</span></button>
+          <div class="section-body">
+            <span class="label">Match live</span>
+            <p class="top-stats-result strong">${state.topStatsMatch.message}</p>
+            <button class="primary" type="button" data-open-topstats>Resume Match</button>
+          </div>
+        `;
+        renderTopStatsMatch();
+        return;
+      }
+
+      const completed = completedTeamIndexes();
+      els.topStatsPanel.innerHTML = `
+        <button class="section-toggle" type="button" data-toggle-section="topstats"><span class="section-title">Top Stats</span></button>
+        <div class="section-body">
+          <span class="label">$${TOP_STATS_COST} entry</span>
+          <p class="top-stats-result">${completed.length}/2 completed teams ready. Choose your clubs and start the match in the table view.</p>
+          <button class="primary" type="button" data-open-topstats>${completed.length >= 2 ? "Open Top Stats" : "View Top Stats"}</button>
+          <p class="top-stats-result strong">${state.topStatsResult}</p>
+        </div>
+      `;
+    }
+
+    function renderTopStatsSetup() {
+      const completed = completedTeamIndexes();
+      const selectedComplete = state.topStatsTeams.filter(index => completed.includes(index)).slice(0, 2);
+      if (selectedComplete.length !== state.topStatsTeams.length) {
+        state.topStatsTeams = selectedComplete;
+      }
+      const canPlay = selectedComplete.length === 2 && state.cash >= TOP_STATS_COST;
+      els.topStatsForfeit.hidden = true;
+      els.topStatsArena.innerHTML = `
+        <div class="section-head">
+          <span class="section-title">Choose Your Clubs</span>
+          <span class="label">$${TOP_STATS_COST} entry</span>
+        </div>
+        <p class="top-stats-result">Pick 2 completed teams for your deck. Rivals draw from the completed club pool, so this still works when the magazine grows.</p>
+        <div class="trump-scoreboard">
+          <div class="trump-score"><span>Completed</span>${completed.length}</div>
+          <div class="trump-score"><span>Selected</span>${selectedComplete.length}/2</div>
+          <div class="trump-score"><span>Prize</span>2 Packs</div>
+        </div>
+        <div class="topstats-team-picker">
+          <div class="picked-teams">
+            <span class="label">Your two clubs</span>
+            <div class="selected-team-list">
+              ${[0, 1].map(slot => {
+                const teamIndex = selectedComplete[slot];
+                return `<div class="selected-team-pill ${teamIndex === undefined ? "empty" : ""}">${teamIndex === undefined ? `Pick club ${slot + 1}` : TEAMS[teamIndex].name}</div>`;
+              }).join("")}
+            </div>
+          </div>
+          <div class="available-teams">
+            <span class="label">Completed clubs</span>
+            <div class="topstats-team-grid">
+              ${completed.length ? completed.map(index => {
+                const team = TEAMS[index];
+                const checked = selectedComplete.includes(index);
+                return `
+                  <label class="team-pick">
+                    <input type="checkbox" data-topstats-team="${index}" ${checked ? "checked" : ""}>
+                    <span>${team.name}</span>
+                    <strong>Complete</strong>
+                  </label>
+                `;
+              }).join("") : `<p class="empty-note">Finish at least 2 team pages to build a Top Stats deck.</p>`}
+            </div>
+          </div>
+        </div>
+        <button class="primary" type="button" data-start-topstats ${canPlay ? "" : "disabled"}>${state.cash < TOP_STATS_COST ? `Need $${TOP_STATS_COST}` : "Start Match"}</button>
+        <p class="top-stats-result strong">${state.topStatsResult}</p>
+      `;
+    }
+
+    function renderTopStatsMatch() {
+      const match = state.topStatsMatch;
+      if (!match) {
+        renderTopStatsSetup();
+        return;
+      }
+      els.topStatsForfeit.hidden = false;
+      const reveal = match.reveal || null;
+      const rivalPick = match.rivalPick || null;
+      const playerCard = stickerById(reveal?.playerId || match.playerDeck[0]);
+      const rivalCard = stickerById(reveal?.rivalId || match.rivalDeck[0]);
+      const playerTurn = match.chooser === "player";
+      const activeCategory = reveal?.categoryKey || rivalPick?.categoryKey || "";
+      const hidePlayer = !playerTurn && !reveal && !rivalPick;
+      const hideRival = false;
+      const playerChoosing = playerTurn && !reveal && !rivalPick;
+      const rivalChoosing = !playerTurn && !reveal && !rivalPick;
+      const tableClass = playerChoosing || rivalChoosing ? "trump-table single-card" : "trump-table has-reveal";
+      const cardMarkup = playerChoosing
+        ? topStatsCardHTML(playerCard, "Your top card", false, true, activeCategory, false)
+        : rivalChoosing
+          ? topStatsCardHTML(rivalCard, "Rival top card", true, false, activeCategory, false)
+          : `
+            ${topStatsCardHTML(playerCard, "Your top card", false, false, activeCategory, hidePlayer)}
+            ${topStatsCardHTML(rivalCard, "Rival top card", true, false, activeCategory, hideRival)}
+          `;
+      els.topStatsArena.innerHTML = `
+        <div class="topstats-match-meta">
+          <div class="trump-score"><span>Your Deck</span>${match.playerDeck.length}</div>
+          <div class="trump-score"><span>Round</span>${match.round}</div>
+          <div class="trump-score"><span>Rivals</span>${match.rivalDeck.length}</div>
+        </div>
+        <div class="${tableClass}">
+          ${cardMarkup}
+        </div>
+        ${reveal ? topStatsRoundResultHTML(match, playerCard, rivalCard) : rivalPick ? `
+          <div class="trump-round-result pending">
+            <span class="round-kicker">Rival Call</span>
+            <strong class="round-title">${categoryLabel(rivalPick.categoryKey)}</strong>
+            <p class="round-copy">${match.message}</p>
+          </div>
+          <button class="primary" type="button" data-resolve-rival-topstats>Compare ${categoryLabel(rivalPick.categoryKey)}</button>
+        ` : playerTurn ? `
+          <div class="trump-round-result pending">
+            <span class="round-kicker">Your Call</span>
+            <strong class="round-title">Pick A Stat</strong>
+            <p class="round-copy">Choose by clicking a stat on your top card.</p>
+          </div>
+        ` : `
+          <div class="trump-round-result pending">
+            <span class="round-kicker">Rival Turn</span>
+            <strong class="round-title">Waiting For The Call</strong>
+            <p class="round-copy">${match.message}</p>
+          </div>
+          <button class="primary" type="button" data-rival-topstats>Rival Chooses</button>
+        `}
+      `;
+    }
+
+    function topStatsRoundResultHTML(match, playerCard, rivalCard) {
+      const reveal = match.reveal;
+      const category = TOP_STATS_CATEGORIES.find(item => item.key === reveal?.categoryKey) || { label: "Top Stat" };
+      const playerScore = stickerStatValue(playerCard, reveal?.categoryKey) ?? 0;
+      const rivalScore = stickerStatValue(rivalCard, reveal?.categoryKey) ?? 0;
+      const resultClass = reveal.winner === "player" ? "win" : reveal.winner === "rival" ? "loss" : "tie";
+      const title = reveal.winner === "player" ? "You Win The Round" : reveal.winner === "rival" ? "Rival Takes It" : "Dead Level";
+      const potText = match.pot.length ? ` with ${match.pot.length} pot card${match.pot.length === 1 ? "" : "s"} waiting` : "";
+      const copy = reveal.winner === "tie"
+        ? `${category.label} is tied. Both cards drop into the pot for the next winner.`
+        : `${category.label} decides it${potText}. ${reveal.winner === "player" ? "You keep the call." : "The rival chooses next."}`;
+      return `
+        <div class="trump-round-result ${resultClass}">
+          <span class="round-kicker">${category.label}</span>
+          <strong class="round-title">${title}</strong>
+          <div class="round-score" aria-label="${playerScore} to ${rivalScore}">
+            <span>${playerScore}</span>
+            <small>vs</small>
+            <span>${rivalScore}</span>
+          </div>
+          <p class="round-copy">${copy}</p>
+          <button class="primary" type="button" data-continue-topstats>Continue Round</button>
+        </div>
+      `;
+    }
+
+    function toggleTopStatsTeam(index, checked) {
+      if (!completedTeamIndexes().includes(index)) return;
+      if (checked) {
+        state.topStatsTeams = [...new Set([...state.topStatsTeams, index])].slice(-2);
+      } else {
+        state.topStatsTeams = state.topStatsTeams.filter(teamIndex => teamIndex !== index);
+      }
+      saveGame();
+      render();
+      if (els.topStatsModal.classList.contains("visible") && !state.topStatsMatch) {
+        renderTopStatsSetup();
+      }
+    }
+
+    function startTopStatsMatch() {
+      if (!state.upgrades.topStats.owned || state.topStatsTeams.length !== 2) return;
+      if (state.cash < TOP_STATS_COST) {
+        setMessage(`You need $${TOP_STATS_COST} to play Top Stats.`);
+        return;
+      }
+      const completed = completedTeamIndexes();
+      if (completed.length < 2) {
+        state.topStatsResult = "Complete at least 2 team pages to play.";
+        render();
+        return;
+      }
+      state.cash -= TOP_STATS_COST;
+      const rivalTeams = pickRivalTopStatsTeams(completed);
+      state.topStatsMatch = {
+        playerDeck: buildTopStatsDeck(state.topStatsTeams),
+        rivalDeck: buildTopStatsDeck(rivalTeams),
+        pot: [],
+        chooser: "player",
+        round: 1,
+        lastCategory: null,
+        reveal: null,
+        rivalPick: null,
+        playerTeams: [...state.topStatsTeams],
+        rivalTeams,
+        message: `Kick-off against ${teamList(rivalTeams)}. Choose the strongest stat on your top card.`
+      };
+      state.topStatsResult = "Match in progress.";
+      state.sections.topstats = true;
+      setMessage("Top Stats match started. Choose a stat from your top card.");
+      saveGame();
+      render();
+      openTopStatsModal();
+    }
+
+    function buildTopStatsDeck(teamIndexes) {
+      const ids = state.stickers
+        .filter(sticker => teamIndexes.includes(sticker.page))
+        .map(sticker => sticker.id);
+      return shuffle(ids).slice(0, TOP_STATS_DECK_SIZE);
+    }
+
+    function pickRivalTopStatsTeams(completed) {
+      const alternatives = completed.filter(index => !state.topStatsTeams.includes(index));
+      const pool = alternatives.length >= 2 ? alternatives : completed;
+      return shuffle(pool).slice(0, 2);
+    }
+
+    function chooseTopStatsCategory(categoryKey) {
+      const category = TOP_STATS_CATEGORIES.find(item => item.key === categoryKey);
+      const match = state.topStatsMatch;
+      if (!match || !category || match.reveal) return;
+      revealTopStatsRound(category.key);
+    }
+
+    function rivalChooseTopStatsCategory() {
+      const match = state.topStatsMatch;
+      const rivalCard = stickerById(match?.rivalDeck?.[0]);
+      if (!match || match.chooser !== "rival" || !rivalCard || match.reveal || match.rivalPick) return;
+      const best = TOP_STATS_CATEGORIES
+        .map(category => ({ key: category.key, value: stickerStatValue(rivalCard, category.key) ?? 0 }))
+        .sort((a, b) => b.value - a.value)[0];
+      match.rivalPick = { categoryKey: best.key };
+      match.message = `Rival studies ${rivalCard.name} and calls ${categoryLabel(best.key)}.`;
+      saveGame();
+      render();
+    }
+
+    function resolveRivalTopStatsPick() {
+      const match = state.topStatsMatch;
+      const categoryKey = match?.rivalPick?.categoryKey;
+      if (!match || !categoryKey) return;
+      match.rivalPick = null;
+      revealTopStatsRound(categoryKey);
+    }
+
+    function revealTopStatsRound(categoryKey) {
+      const match = state.topStatsMatch;
+      if (!match || match.playerDeck.length < 1 || match.rivalDeck.length < 1) return;
+      const category = TOP_STATS_CATEGORIES.find(item => item.key === categoryKey);
+      const playerId = match.playerDeck[0];
+      const rivalId = match.rivalDeck[0];
+      const playerCard = stickerById(playerId);
+      const rivalCard = stickerById(rivalId);
+      const playerScore = stickerStatValue(playerCard, categoryKey) ?? 0;
+      const rivalScore = stickerStatValue(rivalCard, categoryKey) ?? 0;
+      match.lastCategory = categoryKey;
+      match.rivalPick = null;
+
+      if (playerScore > rivalScore) {
+        match.reveal = { playerId, rivalId, categoryKey, winner: "player" };
+        match.message = `${category.label}: ${playerScore}-${rivalScore}. You win the cards and keep the call.`;
+      } else if (rivalScore > playerScore) {
+        match.reveal = { playerId, rivalId, categoryKey, winner: "rival" };
+        match.message = `${category.label}: ${playerScore}-${rivalScore}. Rival wins the cards and chooses next.`;
+      } else {
+        match.reveal = { playerId, rivalId, categoryKey, winner: "tie" };
+        match.message = `${category.label}: ${playerScore}-${rivalScore}. Dead level. Cards go into the pot.`;
+      }
+
+      saveGame();
+      render();
+    }
+
+    function continueTopStatsRound() {
+      const match = state.topStatsMatch;
+      const reveal = match?.reveal;
+      if (!match || !reveal) return;
+      const playerId = match.playerDeck.shift();
+      const rivalId = match.rivalDeck.shift();
+      const prize = [playerId, rivalId, ...match.pot];
+      match.pot = [];
+      if (reveal.winner === "player") {
+        match.playerDeck.push(...prize);
+        match.chooser = "player";
+      } else if (reveal.winner === "rival") {
+        match.rivalDeck.push(...prize);
+        match.chooser = "rival";
+      } else {
+        match.pot.push(...prize);
+      }
+      match.reveal = null;
+      match.round += 1;
+      checkTopStatsFinish();
+      saveGame();
+      render();
+    }
+
+    function checkTopStatsFinish() {
+      const match = state.topStatsMatch;
+      if (!match) return;
+      if (match.playerDeck.length === 0 || match.rivalDeck.length === 0 || match.round > TOP_STATS_MAX_ROUNDS) {
+        const playerScore = match.playerDeck.length + (match.chooser === "player" ? match.pot.length : 0);
+        const rivalScore = match.rivalDeck.length + (match.chooser === "rival" ? match.pot.length : 0);
+        const won = playerScore >= rivalScore && match.playerDeck.length > 0;
+        state.stats.topStatsPlayed += 1;
+        if (won) {
+          state.prizePacks += 2;
+          state.stats.topStatsWon += 1;
+          state.topStatsResult = `Top Stats win over ${teamList(match.rivalTeams)}. Two prize packs added with boosted foil odds.`;
+          setMessage("Top Stats win. Two boosted foil-chance prize packs hit the stack.");
+        } else {
+          state.topStatsResult = `Top Stats loss to ${teamList(match.rivalTeams)}. Entry fee spent.`;
+          setMessage("Top Stats loss. The entry fee is gone.");
+        }
+        state.topStatsMatch = null;
+        closeTopStatsModal();
+        checkAchievements();
+      }
+    }
+
+    function forfeitTopStatsMatch() {
+      if (!state.topStatsMatch) return;
+      if (!window.confirm("Forfeit this unfinished Top Stats match? The entry fee is gone and your teams will unlock again.")) return;
+      state.topStatsResult = "Top Stats forfeited. Entry fee spent.";
+      state.topStatsMatch = null;
+      closeTopStatsModal();
+      saveGame();
+      render();
+    }
+
+    function openTopStatsModal() {
+      if (state.topStatsMatch) {
+        renderTopStatsMatch();
+      } else {
+        renderTopStatsSetup();
+      }
+      els.topStatsModal.classList.add("visible");
+    }
+
+    function closeTopStatsModal() {
+      els.topStatsModal.classList.remove("visible");
+      els.topStatsForfeit.hidden = true;
+    }
+
+    function validTopStatsMatch(match) {
+      return Boolean(
+        match &&
+        Array.isArray(match.playerDeck) &&
+        Array.isArray(match.rivalDeck) &&
+        Array.isArray(match.pot) &&
+        ["player", "rival"].includes(match.chooser)
+      );
+    }
+
+    function teamList(teamIndexes) {
+      return teamIndexes.map(index => TEAMS[index]?.name || "Unknown FC").join(" & ");
+    }
+
+    function categoryLabel(categoryKey) {
+      return TOP_STATS_CATEGORIES.find(category => category.key === categoryKey)?.label || "Top Stat";
+    }
+
+    function topStatsCardHTML(sticker, title, rival = false, chooseable = false, activeCategory = "", hidden = false) {
+      if (!sticker) {
+        return `<div class="trump-card ${rival ? "rival" : ""}"><p class="empty-note">No card</p></div>`;
+      }
+      if (hidden) {
+        return `
+          <div class="trump-card rival">
+            <div class="trump-card-head">
+              <span>${title}</span>
+              <strong>Hidden card</strong>
+              <span>${rival ? "Pick a stat to reveal the rival." : "Rival is choosing. Your card reveals on compare."}</span>
+            </div>
+            <div class="trump-hidden-card">${rival ? "Rival Card" : "Your Card"}</div>
+          </div>
+        `;
+      }
+      return `
+        <div class="trump-card ${rival ? "rival" : ""}">
+          <div class="trump-card-head">
+            <span>${title}</span>
+            <strong>${sticker.name}</strong>
+            <span>#${sticker.number} ${sticker.position} - ${sticker.team}</span>
+          </div>
+          ${stickerHTML(sticker)}
+          <div class="compact-stats">${compactStatsHTML(sticker, chooseable, activeCategory)}</div>
+        </div>
+      `;
+    }
+
+    function compactStatsHTML(sticker, chooseable = false, activeCategory = "") {
+      return TOP_STATS_CATEGORIES.map(category => {
+        const value = stickerStatDisplay(sticker, category.key);
+        const tag = chooseable ? "button" : "div";
+        const action = chooseable ? ` type="button" data-choose-topstats="${category.key}"` : "";
+        return `
+          <${tag} class="compact-stat ${activeCategory === category.key ? "selected" : ""}"${action}>
+            <span>${category.label}</span>
+            <strong>${value}</strong>
+          </${tag}>
+        `;
+      }).join("");
+    }
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function renderKeepy() {
+      if (keepy.x === null || keepy.y === null) {
+        positionKeepyAtRest();
+      }
+      els.keepyScore.textContent = keepy.score;
+      els.keepyBest.textContent = keepy.best;
+      els.soccerBall.style.setProperty("--ball-x", `${keepy.x.toFixed(1)}px`);
+      els.soccerBall.style.setProperty("--ball-y", `${keepy.y.toFixed(1)}px`);
+      els.soccerBall.style.setProperty("--ball-rot", `${keepy.rotation.toFixed(1)}deg`);
+    }
+
+    function keepyRadius() {
+      return Math.max(28, els.soccerBall.offsetWidth / 2 || 35);
+    }
+
+    function positionKeepyAtRest() {
+      const radius = keepyRadius();
+      keepy.x = Math.max(radius + 12, window.innerWidth - radius - 24);
+      keepy.y = Math.max(radius + 12, window.innerHeight - radius - 24);
+    }
+
+    function resetKeepy() {
+      positionKeepyAtRest();
+      keepy.vx = 0;
+      keepy.vy = 0;
+      keepy.spin *= 0.35;
+      keepy.score = 0;
+      keepy.active = false;
+      keepy.lastTime = 0;
+      if (keepy.frame) {
+        cancelAnimationFrame(keepy.frame);
+        keepy.frame = 0;
+      }
+      renderKeepy();
+    }
+
+    function keepyBounds() {
+      const radius = keepyRadius();
+      return {
+        left: radius + 6,
+        right: window.innerWidth - radius - 6,
+        top: radius + 6,
+        bottom: window.innerHeight - radius - 6
+      };
+    }
+
+    function animateKeepy(now) {
+      if (!keepy.active) return;
+      if (!keepy.lastTime) keepy.lastTime = now;
+      const dt = Math.min(0.032, (now - keepy.lastTime) / 1000);
+      keepy.lastTime = now;
+
+      keepy.vy += 1060 * dt;
+      keepy.vx *= 0.996;
+      keepy.spin *= 0.997;
+      keepy.x += keepy.vx * dt;
+      keepy.y += keepy.vy * dt;
+      keepy.rotation += keepy.spin * dt;
+
+      const bounds = keepyBounds();
+      if (keepy.x < bounds.left) {
+        keepy.x = bounds.left;
+        keepy.vx = Math.abs(keepy.vx) * 0.72;
+        keepy.spin *= -0.65;
+      } else if (keepy.x > bounds.right) {
+        keepy.x = bounds.right;
+        keepy.vx = -Math.abs(keepy.vx) * 0.72;
+        keepy.spin *= -0.65;
+      }
+
+      if (keepy.y < bounds.top) {
+        keepy.y = bounds.top;
+        keepy.vy = Math.abs(keepy.vy) * 0.38;
+      }
+
+      if (keepy.y >= bounds.bottom && keepy.vy > 0) {
+        resetKeepy();
+        return;
+      }
+
+      renderKeepy();
+      keepy.frame = requestAnimationFrame(animateKeepy);
+    }
+
+    function kickKeepy(event) {
+      event.preventDefault();
+      const rect = els.soccerBall.getBoundingClientRect();
+      const point = event.touches ? event.touches[0] : event;
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const hitX = Math.max(-1, Math.min(1, (point.clientX - centerX) / (rect.width / 2)));
+      const hitY = Math.max(-1, Math.min(1, (point.clientY - centerY) / (rect.height / 2)));
+      const sideForce = -hitX * 640;
+      const liftForce = -650 - Math.max(0, hitY) * 250 + Math.max(0, -hitY) * 60;
+      const softener = keepy.active ? 0.56 : 0.18;
+
+      keepy.vx = keepy.vx * softener + sideForce + (Math.random() - 0.5) * 48;
+      keepy.vy = Math.min(keepy.vy * 0.12, 0) + liftForce;
+      keepy.spin = keepy.vx * 1.15 + (hitY * -180);
+      keepy.score += 1;
+      if (keepy.score > keepy.best) {
+        keepy.best = keepy.score;
+        localStorage.setItem(KEEPY_BEST_KEY, String(keepy.best));
+      }
+      keepy.active = true;
+      keepy.lastTime = 0;
+      renderKeepy();
+      if (!keepy.frame) keepy.frame = requestAnimationFrame(animateKeepy);
+    }
+
+    function render() {
+      if (checkAchievements()) saveGame();
+      renderSections();
+      renderStats();
+      renderUpgrades();
+      renderTopStats();
+      renderTrivia();
+      renderAlbum();
+      renderPacks();
+      renderOpened();
+    }
+
+    function foilCompletedTeamIndexes() {
+      return TEAMS
+        .map((team, index) => index)
+        .filter(index => state.stickers
+          .filter(sticker => sticker.page === index)
+          .every(sticker => state.placed.get(sticker.id)?.foil));
+    }
+
+    function foilPlacedCount() {
+      return Array.from(state.placed.values()).filter(placement => placement?.foil).length;
+    }
+
+    function normalizeAchievements(saved) {
+      if (!saved || typeof saved !== "object") return {};
+      return Object.fromEntries(Object.entries(saved).map(([id, value]) => {
+        if (value && typeof value === "object") {
+          return [id, {
+            unlockedAt: Number.isFinite(value.unlockedAt) ? value.unlockedAt : Date.now(),
+            redeemed: Boolean(value.redeemed)
+          }];
+        }
+        return [id, { unlockedAt: Number(value) || Date.now(), redeemed: true }];
+      }));
+    }
+
+    function achievementRecord(id) {
+      const record = state.achievements[id];
+      return record && typeof record === "object" ? record : null;
+    }
+
+    function isAchievementUnlocked(id) {
+      return Boolean(achievementRecord(id));
+    }
+
+    function isAchievementRedeemed(id) {
+      return Boolean(achievementRecord(id)?.redeemed);
+    }
+
+    function checkAchievements() {
+      const newlyUnlocked = [];
+      ACHIEVEMENTS.forEach(achievement => {
+        if (isAchievementUnlocked(achievement.id)) return;
+        if (!achievement.test()) return;
+        state.achievements[achievement.id] = { unlockedAt: Date.now(), redeemed: false };
+        newlyUnlocked.push(achievement.name);
+      });
+      if (newlyUnlocked.length) {
+        setMessage(`Trophy unlocked: ${newlyUnlocked[0]}${newlyUnlocked.length > 1 ? ` +${newlyUnlocked.length - 1} more` : ""}. Claim it in the Trophy Room.`);
+      }
+      return newlyUnlocked.length > 0;
+    }
+
+    function applyAchievementReward(reward = {}) {
+      if (reward.cash) state.cash += reward.cash;
+      if (reward.packs) state.packs += reward.packs;
+      if (reward.prizePacks) state.prizePacks += reward.prizePacks;
+      if (reward.luck) state.luck = Math.max(0, Math.min(30, state.luck + reward.luck));
+    }
+
+    function rewardText(reward = {}) {
+      const parts = [];
+      if (reward.cash) parts.push(`+$${reward.cash}`);
+      if (reward.packs) parts.push(`+${reward.packs} pack${reward.packs === 1 ? "" : "s"}`);
+      if (reward.prizePacks) parts.push(`+${reward.prizePacks} prize pack${reward.prizePacks === 1 ? "" : "s"}`);
+      if (reward.luck) parts.push(`+${reward.luck}% Need Boost`);
+      return parts.join(", ") || "Bragging rights";
+    }
+
+    function redeemAchievement(id) {
+      const achievement = ACHIEVEMENTS.find(item => item.id === id);
+      const record = achievementRecord(id);
+      if (!achievement || !record || record.redeemed) return;
+      applyAchievementReward(achievement.reward);
+      record.redeemed = true;
+      setMessage(`Redeemed ${achievement.name}: ${rewardText(achievement.reward)}.`);
+      saveGame();
+      render();
+      renderAchievements();
+    }
+
+    function renderAchievements() {
+      if (checkAchievements()) saveGame();
+      const unlocked = ACHIEVEMENTS.filter(achievement => isAchievementUnlocked(achievement.id)).length;
+      const unclaimed = ACHIEVEMENTS.filter(achievement => isAchievementUnlocked(achievement.id) && !isAchievementRedeemed(achievement.id)).length;
+      els.achievementsRoom.innerHTML = `
+        <div class="achievement-summary">
+          <div class="stat"><span class="label">Trophies</span><span class="value">${unlocked}/${ACHIEVEMENTS.length}</span></div>
+          <div class="stat"><span class="label">Unclaimed</span><span class="value">${unclaimed}</span></div>
+          <div class="stat"><span class="label">Foils</span><span class="value">${foilPlacedCount()}/${TOTAL_PAGES * PAGE_SIZE}</span></div>
+          <div class="stat"><span class="label">Packs Opened</span><span class="value">${state.stats.packsOpened}</span></div>
+        </div>
+        <div class="achievement-grid">
+          ${ACHIEVEMENTS.map(achievement => {
+            const done = isAchievementUnlocked(achievement.id);
+            const redeemed = isAchievementRedeemed(achievement.id);
+            return `
+              <div class="achievement ${done ? "done" : ""}">
+                <strong>${done ? redeemed ? "Redeemed: " : "Unlocked: " : ""}${achievement.name}</strong>
+                <p>${achievement.desc}</p>
+                <span class="achievement-reward">${rewardText(achievement.reward)}</span>
+                ${done && !redeemed ? `<button class="primary" type="button" data-redeem-achievement="${achievement.id}">Redeem</button>` : ""}
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    function openAchievementsModal() {
+      renderAchievements();
+      els.achievementsModal.classList.add("visible");
+    }
+
+    function closeAchievementsModal() {
+      els.achievementsModal.classList.remove("visible");
+    }
+
+    function renderSections() {
+      document.querySelectorAll("[data-collapsible]").forEach(section => {
+        const key = section.dataset.collapsible;
+        section.classList.toggle("expanded", Boolean(state.sections[key]));
+      });
+    }
+
+    function toggleSection(key) {
+      if (!(key in state.sections)) return;
+      state.sections[key] = !state.sections[key];
+      saveGame();
+      render();
+    }
+
+    function openDetails(id, options = {}) {
+      const sticker = stickerById(id);
+      if (!sticker) return;
+      const inventoryItem = options.uid ? state.inventory.find(item => item.uid === options.uid) : null;
+      const fromInventory = Boolean(inventoryItem);
+      const displayFoil = fromInventory ? Boolean(inventoryItem.foil) : displayFoilFor(sticker.id);
+      const canLift = !fromInventory && state.upgrades.stickerLift.owned && state.placed.has(sticker.id) && !isStickerLockedByTopStats(sticker.id);
+      const canReplace = fromInventory && state.placed.has(sticker.id);
+      const value = displayFoil ? sticker.value * 3 : sticker.value;
+      const action = canReplace
+        ? { type: "replace", attr: `data-replace-uid="${inventoryItem.uid}"`, label: "Replace sticker", icon: replaceIconHTML() }
+        : canLift
+          ? { type: "remove", attr: `data-request-destroy="${sticker.id}"`, label: "Remove sticker", icon: trashIconHTML() }
+          : null;
+      resetDetailPointer();
+      els.detailSticker.innerHTML = stickerHTML(sticker, displayFoil, { value, action });
+      els.detailInfo.innerHTML = "";
+      els.detailModal.classList.add("visible");
+    }
+
+    function displayFoilFor(id) {
+      return Boolean(state.placed.get(id)?.foil || state.inventory.some(item => item.id === id && item.foil));
+    }
+
+    function statBarsHTML(sticker) {
+      const values = TOP_STATS_CATEGORIES
+        .map(category => stickerStatValue(sticker, category.key))
+        .filter(value => value !== null);
+      const average = values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) : "";
+      return `
+        <div class="stat-title">
+          <strong>Top Stats</strong>
+          <span class="label">${sticker.position}${average === "" ? "" : ` average ${average}`}</span>
+        </div>
+        <div class="stat-grid">
+          ${TOP_STATS_CATEGORIES.map(category => {
+        const value = stickerStatValue(sticker, category.key);
+        return `
+          <div class="player-stat">
+            <div class="player-stat-name">${category.label}</div>
+            <div class="player-stat-value">${value === null ? "" : value}</div>
+            <div class="player-stat-track"><div class="player-stat-fill" style="--stat-width:${value === null ? 0 : value}%;"></div></div>
+          </div>
+        `;
+      }).join("")}
+        </div>
+      `;
+    }
+
+    function closeDetails() {
+      els.detailModal.classList.remove("visible");
+      resetDetailPointer();
+    }
+
+    function closeResult() {
+      els.resultModal.classList.remove("visible");
+    }
+
+    function handleModalBackdropClick(event) {
+      if (event.target === els.detailModal) {
+        closeDetails();
+      }
+    }
+
+    document.addEventListener("click", event => {
+      const bookPrevButton = event.target.closest("[data-book-prev]");
+      const bookNextButton = event.target.closest("[data-book-next]");
+      const detailButton = event.target.closest("[data-detail-id]");
+      const sticker = event.target.closest("[data-sticker-id]");
+      const sellButton = event.target.closest("[data-sell-uid]");
+      const placeButton = event.target.closest("[data-place-uid]");
+      const replaceButton = event.target.closest("[data-replace-uid]");
+      const liftButton = event.target.closest("[data-lift-sticker]");
+      const requestDestroyButton = event.target.closest("[data-request-destroy]");
+      const confirmDestroyButton = event.target.closest("[data-confirm-destroy]");
+      const triviaButton = event.target.closest("[data-trivia-team]");
+      const openTriviaButton = event.target.closest("[data-open-trivia]");
+      const buyUpgradeButton = event.target.closest("[data-buy-upgrade]");
+      const startTopStatsButton = event.target.closest("[data-start-topstats]");
+      const openTopStatsButton = event.target.closest("[data-open-topstats]");
+      const chooseTopStatsButton = event.target.closest("[data-choose-topstats]");
+      const continueTopStatsButton = event.target.closest("[data-continue-topstats]");
+      const resolveRivalTopStatsButton = event.target.closest("[data-resolve-rival-topstats]");
+      const rivalTopStatsButton = event.target.closest("[data-rival-topstats]");
+      const forfeitTopStatsButton = event.target.closest("[data-forfeit-topstats]");
+      const openAchievementsButton = event.target.closest("[data-open-achievements]");
+      const redeemAchievementButton = event.target.closest("[data-redeem-achievement]");
+      const sectionToggle = event.target.closest("[data-toggle-section]");
+      const closeButton = event.target.closest("[data-close]");
+
+      if (sectionToggle) {
+        toggleSection(sectionToggle.dataset.toggleSection);
+      } else if (bookPrevButton) {
+        turnSpread(-1);
+      } else if (bookNextButton) {
+        turnSpread(1);
+      } else if (triviaButton) {
+        answerTrivia(triviaButton.dataset.triviaTeam);
+      } else if (openTriviaButton) {
+        openTriviaModal();
+      } else if (buyUpgradeButton) {
+        buyUpgrade(buyUpgradeButton.dataset.buyUpgrade);
+      } else if (startTopStatsButton) {
+        startTopStatsMatch();
+      } else if (openTopStatsButton) {
+        openTopStatsModal();
+      } else if (chooseTopStatsButton) {
+        chooseTopStatsCategory(chooseTopStatsButton.dataset.chooseTopstats);
+      } else if (continueTopStatsButton) {
+        continueTopStatsRound();
+      } else if (resolveRivalTopStatsButton) {
+        resolveRivalTopStatsPick();
+      } else if (rivalTopStatsButton) {
+        rivalChooseTopStatsCategory();
+      } else if (forfeitTopStatsButton) {
+        forfeitTopStatsMatch();
+      } else if (openAchievementsButton) {
+        openAchievementsModal();
+      } else if (redeemAchievementButton) {
+        redeemAchievement(redeemAchievementButton.dataset.redeemAchievement);
+      } else if (replaceButton) {
+        startReplacement(replaceButton.dataset.replaceUid);
+      } else if (requestDestroyButton) {
+        requestDestroySticker(requestDestroyButton.dataset.requestDestroy);
+      } else if (confirmDestroyButton) {
+        confirmDestroySticker();
+      } else if (liftButton) {
+        liftPlacedSticker(liftButton.dataset.liftSticker);
+      } else if (detailButton) {
+        openDetails(detailButton.dataset.detailId, { uid: detailButton.dataset.detailUid });
+      } else if (sellButton) {
+        sellInventory(sellButton.dataset.sellUid);
+      } else if (placeButton) {
+        startPlacement(placeButton.dataset.placeUid);
+      } else if (sticker) {
+        const pull = event.target.closest(".pull[data-pull-uid]");
+        openDetails(sticker.dataset.stickerId, { uid: pull?.dataset.pullUid });
+      } else if (closeButton?.dataset.close === "detail") {
+        closeDetails();
+      } else if (closeButton?.dataset.close === "destroy") {
+        closeDestroyModal();
+      } else if (closeButton?.dataset.close === "place") {
+        closePlaceModal();
+      } else if (closeButton?.dataset.close === "result") {
+        closeResult();
+      } else if (closeButton?.dataset.close === "topstats") {
+        closeTopStatsModal();
+      } else if (closeButton?.dataset.close === "trivia") {
+        closeTriviaModal();
+      } else if (closeButton?.dataset.close === "achievements") {
+        closeAchievementsModal();
+      } else if (closeButton?.dataset.close === "reveal") {
+        closeRevealModal();
+      }
+    });
+
+    document.addEventListener("change", event => {
+      const toggle = event.target.closest("[data-toggle-upgrade]");
+      const topStatsTeam = event.target.closest("[data-topstats-team]");
+      const topStatsCategory = event.target.closest("[data-topstats-category]");
+      if (toggle) {
+        toggleUpgrade(toggle.dataset.toggleUpgrade, toggle.checked);
+      } else if (topStatsTeam) {
+        toggleTopStatsTeam(Number(topStatsTeam.dataset.topstatsTeam), topStatsTeam.checked);
+      } else if (topStatsCategory) {
+        state.topStatsCategory = topStatsCategory.dataset.topstatsCategory;
+        saveGame();
+        render();
+      }
+    });
+
+    function updateFoilPointer(event) {
+      const card = event.target.closest(".sticker.foil");
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const x = Math.max(0, Math.min(100, ((event.clientX - rect.left) / rect.width) * 100));
+      const y = Math.max(0, Math.min(100, ((event.clientY - rect.top) / rect.height) * 100));
+      const rotateY = ((x - 50) / 50) * 9;
+      const rotateX = ((50 - y) / 50) * 7;
+      card.style.setProperty("--foil-x", `${x}%`);
+      card.style.setProperty("--foil-y", `${y}%`);
+      card.style.setProperty("--foil-rx", `${rotateX}deg`);
+      card.style.setProperty("--foil-ry", `${rotateY}deg`);
+    }
+
+    function resetFoilPointer(event) {
+      const card = event.target.closest(".sticker.foil");
+      if (!card) return;
+      if (event.relatedTarget && card.contains(event.relatedTarget)) return;
+      card.style.setProperty("--foil-x", "50%");
+      card.style.setProperty("--foil-y", "50%");
+      card.style.setProperty("--foil-rx", "0deg");
+      card.style.setProperty("--foil-ry", "0deg");
+    }
+
+    function updateDetailPointer(event) {
+      if (!els.detailModal.classList.contains("visible")) return;
+      const point = event.touches ? event.touches[0] : event;
+      if (!point) return;
+      const rect = els.detailStage.getBoundingClientRect();
+      const x = Math.max(0, Math.min(1, (point.clientX - rect.left) / rect.width));
+      const y = Math.max(0, Math.min(1, (point.clientY - rect.top) / rect.height));
+      const rotateY = (x - 0.5) * 24;
+      const rotateX = (0.5 - y) * 18;
+      els.detailStage.classList.add("is-touching");
+      els.detailSpinCard.style.setProperty("--detail-rx", `${rotateX}deg`);
+      els.detailSpinCard.style.setProperty("--detail-ry", `${rotateY}deg`);
+      const foilCard = els.detailSticker.querySelector(".sticker.foil");
+      if (foilCard) {
+        foilCard.style.setProperty("--foil-x", `${x * 100}%`);
+        foilCard.style.setProperty("--foil-y", `${y * 100}%`);
+      }
+    }
+
+    function resetDetailPointer() {
+      els.detailStage.classList.remove("is-touching");
+      els.detailSpinCard.style.setProperty("--detail-rx", "0deg");
+      els.detailSpinCard.style.setProperty("--detail-ry", "0deg");
+      const foilCard = els.detailSticker.querySelector(".sticker.foil");
+      if (foilCard) {
+        foilCard.style.setProperty("--foil-x", "50%");
+        foilCard.style.setProperty("--foil-y", "50%");
+      }
+    }
+
+    els.buyPack.addEventListener("click", buyPack);
+    els.startGame.addEventListener("click", () => {
+      els.splash.classList.add("hidden");
+    });
+    els.openPack.addEventListener("click", openPack);
+    els.revealNext.addEventListener("click", revealNextSticker);
+    els.soccerBall.addEventListener("pointerdown", kickKeepy);
+    els.placeNow.addEventListener("click", finishPlacement);
+    els.placeStage.addEventListener("click", finishPlacement);
+    els.placeStage.addEventListener("mousemove", updatePlacementPointer);
+    els.placeStage.addEventListener("mouseleave", clearPlacementPointer);
+    els.placeStage.addEventListener("touchstart", updatePlacementPointer, { passive: true });
+    els.placeStage.addEventListener("touchmove", updatePlacementPointer, { passive: true });
+    els.placeStage.addEventListener("touchend", clearPlacementPointer);
+    els.detailStage.addEventListener("mousemove", updateDetailPointer);
+    els.detailStage.addEventListener("mouseleave", resetDetailPointer);
+    els.detailStage.addEventListener("touchstart", updateDetailPointer, { passive: true });
+    els.detailStage.addEventListener("touchmove", updateDetailPointer, { passive: true });
+    els.detailStage.addEventListener("touchend", resetDetailPointer);
+    els.detailModal.addEventListener("click", handleModalBackdropClick);
+    document.addEventListener("pointermove", updateFoilPointer);
+    document.addEventListener("pointerout", resetFoilPointer);
+    window.addEventListener("resize", () => {
+      window.clearTimeout(state.resizeTimer);
+      state.resizeTimer = window.setTimeout(renderAlbum, 120);
+      if (!keepy.active) resetKeepy();
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeRevealModal();
+        closeDetails();
+        closeDestroyModal();
+        closePlaceModal();
+        closeResult();
+        closeTopStatsModal();
+        closeTriviaModal();
+        closeAchievementsModal();
+      }
+    });
+
+    createStickers();
+    loadGame();
+    state.stickers.forEach(sticker => {
+      if (!sticker.stats) {
+        sticker.stats = generatePlayerStats(sticker.position, sticker.rarity, sticker.artIndex, sticker.page);
+      }
+    });
+    if (!state.trivia) startTriviaQuestion();
+    renderKeepy();
+    render();
+  </script>
+</body>
+</html>
+  
