@@ -2980,23 +2980,32 @@
       .album-shell {
         min-height: var(--magazine-height);
         padding: 0 4px 10px;
+        overflow: hidden;
       }
 
       .album-page {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-auto-rows: minmax(116px, auto);
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-auto-rows: minmax(88px, auto);
         gap: 6px;
       }
 
       .album-spread {
-        grid-template-columns: 1fr;
+        display: flex;
+        grid-template-columns: none;
+        min-width: 0;
         min-height: var(--magazine-height);
         border-radius: 10px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: thin;
       }
 
       .album-spread.single-page {
+        display: grid;
         grid-template-columns: minmax(0, min(100%, 420px));
         justify-content: center;
+        overflow: visible;
       }
 
       .album-spread::before {
@@ -3006,9 +3015,11 @@
       .book-page,
       .book-page.left-page,
       .book-page.right-page {
+        flex: 0 0 100%;
         border-radius: 8px;
         min-height: var(--magazine-height);
         padding: 18px 14px 20px;
+        scroll-snap-align: start;
       }
 
       .book-cover {
@@ -3024,7 +3035,7 @@
 
       .slot,
       .sticker {
-        min-height: 112px;
+        min-height: 88px;
       }
 
       .pull {
